@@ -1,15 +1,7 @@
 <template>
-<mu-paper>
-  <mu-bottom-nav :value="bottomNav" @change="handleChange">
-    <mu-bottom-nav-item value="recents" title="Recents" icon="restore"/>
-    <mu-bottom-nav-item value="favorites" title="Favorites" icon="favorite"/>
-    <mu-bottom-nav-item value="nearby" title="Nearby" icon="location_on"/>
-  </mu-bottom-nav>
-  <mu-raised-button label="玩游戏" class="demo-raised-button" primary @click="play"/>
-  <mu-raised-button class="demo-raised-button" label="选择文件">
-    <input type="file" class="file-button" @change="upload($event)">
-  </mu-raised-button>
-</mu-paper>
+  <div class="layout">
+    
+  </div>
 </template>
 
 <script>
@@ -20,7 +12,7 @@ const BrowserWindow = remote.BrowserWindow
 export default {
   data () {
     return {
-      bottomNav: 'recents'
+      activeTab: 'tab1'
     }
   },
   mounted: function () {
@@ -44,8 +36,8 @@ export default {
       axios.post('http://localhost:3000/upload', formData, config).then(function (res) {
       })
     },
-    handleChange (val) {
-      this.bottomNav = val
+    handleTabChange (val) {
+      this.activeTab = val
     },
     play () {
       const url = `http://localhost:3000/template.html?roomId=1000&gameId=1000&id=1`
@@ -69,4 +61,25 @@ export default {
   bottom: 0;
   opacity: 0;
 }
+
+.content{
+  overflow: hidden;
+}
+
+.content-left{
+  width: 30%;
+  float: left;
+  background-color: white;
+  margin-bottom: -4000px;
+  padding-bottom: 4000px;
+}
+
+.content-right{
+  width: 70%;
+  display: inline-block;
+  float: right;
+  padding: 10px 20px;
+  background-color: rgba(0, 0, 0, 0)
+}
+
 </style>
