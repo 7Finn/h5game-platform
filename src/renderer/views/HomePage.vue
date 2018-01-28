@@ -1,6 +1,24 @@
 <template>
-  <div class="layout">
-    
+  <div class="content">
+    <mu-paper class="content-left" :zDepth="1" :rounded="false">
+      <mu-list class="content-appbar">
+        <mu-sub-header>最近的游戏</mu-sub-header>
+        <mu-list-item title="拼图游戏">
+          <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
+          <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+            <mu-menu-item title="删除" />
+          </mu-icon-menu>
+        </mu-list-item>
+        <mu-list-item title="跳一跳">
+          <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
+          <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+            <mu-menu-item title="删除" />
+          </mu-icon-menu>
+        </mu-list-item>
+      </mu-list>
+    </mu-paper>
+    <div class="content-right">
+    </div>
   </div>
 </template>
 
@@ -52,29 +70,24 @@ export default {
 }
 </script>
 
-<style>
-.file-button{
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  opacity: 0;
-}
+<style lang='less'>
 
-.content{
+.content {
+  height: 100%;
   overflow: hidden;
 }
 
-.content-left{
+.content-left {
   width: 30%;
+  height: 100%;
   float: left;
-  background-color: white;
-  margin-bottom: -4000px;
-  padding-bottom: 4000px;
 }
 
-.content-right{
+.content-appbar {
+  height: 100%;
+}
+
+.content-right {
   width: 70%;
   display: inline-block;
   float: right;

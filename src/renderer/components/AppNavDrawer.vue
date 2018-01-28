@@ -1,10 +1,21 @@
-<template>
-<mu-drawer @hide="handleHide" @close="handleClose" :open="open" :docked="docked" :overlay="docked" class="app-drawer" :zDepth="1">
-  <div class="platform-drawer-content">
-    <mu-list>
-    </mu-list>
-  </div>
-</mu-drawer>
+  <template>
+  <mu-drawer @hide="handleHide" @close="handleClose" :open="open" :docked="docked" :overlay="docked" class="app-drawer" :zDepth="1">
+      <mu-list style="height: 1000px">
+        <mu-sub-header>最近的游戏</mu-sub-header>
+        <mu-list-item title="拼图游戏">
+          <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
+          <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+            <mu-menu-item title="删除" />
+          </mu-icon-menu>
+        </mu-list-item>
+        <mu-list-item title="跳一跳">
+          <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
+          <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+            <mu-menu-item title="删除" />
+          </mu-icon-menu>
+        </mu-list-item>
+      </mu-list>
+  </mu-drawer>
 </template>
 
 <script>
