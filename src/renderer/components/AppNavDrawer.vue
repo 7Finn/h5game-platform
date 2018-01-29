@@ -1,44 +1,38 @@
   <template>
-  <mu-drawer @hide="handleHide" @close="handleClose" :open="open" :docked="docked" :overlay="docked" class="app-drawer" :zDepth="1">
-      <mu-list style="height: 1000px">
-        <mu-sub-header>最近的游戏</mu-sub-header>
-        <mu-list-item title="拼图游戏">
-          <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
-          <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
-            <mu-menu-item title="删除" />
-          </mu-icon-menu>
-        </mu-list-item>
-        <mu-list-item title="跳一跳">
-          <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
-          <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
-            <mu-menu-item title="删除" />
-          </mu-icon-menu>
-        </mu-list-item>
-      </mu-list>
-  </mu-drawer>
+    <mu-list class="content-appbar" :value="select" @change="handleSelectChange">
+      <mu-sub-header>最近的游戏</mu-sub-header>
+      <mu-list-item title="拼图游戏" value="1" :class="{ active: select === '1'}">
+        <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
+        <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+          <mu-menu-item title="删除" />
+        </mu-icon-menu>
+      </mu-list-item>
+      <mu-list-item title="跳一跳" value="2" :class="{ active: select === '2'}">
+        <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
+        <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+          <mu-menu-item title="删除" />
+        </mu-icon-menu>
+      </mu-list-item>
+    </mu-list>
 </template>
 
 <script>
 export default {
   props: {
-    open: {
-      type: Boolean,
-      default: true
-    },
-    docked: {
-      type: Boolean,
-      default: true
+    list: {
+      type: Array,
+      default: []
     }
   },
   data () {
     return {
+      select: '1'
     }
   },
   methods: {
-    handleClose () {
-      this.$emit('close')
-    },
-    handleHide () {
+    handleSelectChange (val) {
+      this.select = val
+      this.$emit('selectChange', val)
     }
   },
   mounted () {
@@ -47,20 +41,11 @@ export default {
 </script>
 
 <style lang="less">
-.app-drawer {
-  display: flex;
-  flex-direction: column;
+.content-appbar {
+  height: 100%;
 }
 
-.platform-drawer-content {
-  flex: 1;
-  overflow: auto;
-  &::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    -webkit-appearance: none;
-    opacity: 0 !important;
-  }
+.active {
+  background-color: #eee;
 }
 </style>

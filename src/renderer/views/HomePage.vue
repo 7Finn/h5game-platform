@@ -1,23 +1,17 @@
 <template>
   <div class="content">
     <mu-paper class="content-left" :zDepth="1" :rounded="false">
-      <mu-list class="content-appbar">
-        <mu-sub-header>最近的游戏</mu-sub-header>
-        <mu-list-item title="拼图游戏">
-          <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
-          <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
-            <mu-menu-item title="删除" />
-          </mu-icon-menu>
-        </mu-list-item>
-        <mu-list-item title="跳一跳">
-          <mu-avatar src="assets/logo.png" slot="leftAvatar"/>
-          <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
-            <mu-menu-item title="删除" />
-          </mu-icon-menu>
-        </mu-list-item>
-      </mu-list>
+      <app-nav :list="[]" @selectChange="selectMenuChange"></app-nav>
     </mu-paper>
     <div class="content-right">
+      <div class="game-detail">
+        <p>title</p>
+      </div>
+      <div class="bottom-buttons" >
+        <mu-raised-button class="demo-raised-button" label="自己玩" icon="android" primary/>
+        <mu-raised-button class="demo-raised-button" label="邀请好友" icon="android" primary/>
+        <mu-raised-button class="demo-raised-button" icon="android" backgroundColor="#a4c639" />
+      </div>
     </div>
   </div>
 </template>
@@ -25,19 +19,23 @@
 <script>
 import { remote } from 'electron'
 import axios from 'axios'
+import AppNavDrawer from '../components/AppNavDrawer'
 const BrowserWindow = remote.BrowserWindow
 
 export default {
+  components: {
+    'app-nav': AppNavDrawer
+  },
   data () {
     return {
-      activeTab: 'tab1'
+      select: '1'
     }
   },
   mounted: function () {
-    this.$nextTick(this.init())
   },
   methods: {
-    init () {
+    selectMenuChange (val) {
+      this.select = val
     },
     upload (event) {
       let file = event.target.files[0]
@@ -53,9 +51,6 @@ export default {
 
       axios.post('http://localhost:3000/upload', formData, config).then(function (res) {
       })
-    },
-    handleTabChange (val) {
-      this.activeTab = val
     },
     play () {
       const url = `http://localhost:3000/template.html?roomId=1000&gameId=1000&id=1`
@@ -78,21 +73,28 @@ export default {
 }
 
 .content-left {
-  width: 30%;
+  width: 250px;
   height: 100%;
   float: left;
 }
 
-.content-appbar {
+.content-right {
+  position: relative;
+  margin-left: 250px;
   height: 100%;
+  background-color: rgba(0, 0, 0, 0)
 }
 
-.content-right {
-  width: 70%;
-  display: inline-block;
-  float: right;
+.bottom-buttons {
+  text-align: right;
+  width: 100%;
   padding: 10px 20px;
-  background-color: rgba(0, 0, 0, 0)
+  position: absolute;
+  bottom: 0;
+}
+
+.game-detail {
+  padding: 20px;
 }
 
 </style>

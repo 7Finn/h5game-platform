@@ -3,10 +3,9 @@
     <div class="platform-appbar">
       <mu-paper>
         <mu-bottom-nav :value="activeNav" shift @change="handleNavChange">
-          <mu-bottom-nav-item value="movies" title="Movies" icon="ondemand_video"/>
-          <mu-bottom-nav-item value="music" title="Music" icon="music_note"/>
+          <mu-bottom-nav-item to="/" value="main" title="Main" icon="star"/>
+          <mu-bottom-nav-item to="/store" value="store" title="Store" icon="inbox"/>
           <mu-bottom-nav-item value="books" title="Books" icon="books"/>
-          <mu-bottom-nav-item value="pictures" title="Pictures" icon="photo"/>
         </mu-bottom-nav>
       </mu-paper>
     </div>
@@ -20,7 +19,7 @@
 export default {
   data () {
     return {
-      activeNav: 'movies',
+      activeNav: 'main',
       open: true,
       docked: true,
       title: ''
