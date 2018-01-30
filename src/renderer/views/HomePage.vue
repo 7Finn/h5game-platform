@@ -9,9 +9,36 @@
       </div>
       <div class="bottom-buttons" >
         <mu-raised-button class="demo-raised-button" label="自己玩" icon="android" primary/>
-        <mu-raised-button class="demo-raised-button" label="邀请好友" icon="android" primary/>
+        <mu-raised-button class="demo-raised-button" @click="toggleFriendsDrawer" label="邀请好友" icon="android" primary/>
         <mu-raised-button class="demo-raised-button" icon="android" backgroundColor="#a4c639" />
       </div>
+      <mu-drawer right :open="friendsDrawer" :docked="false" @close="toggleFriendsDrawer">
+        <mu-list>
+          <mu-list>
+            <mu-sub-header>邀请好友</mu-sub-header>
+            <mu-list-item title="Mike Li">
+              <mu-avatar src="/images/avatar1.jpg" slot="leftAvatar"/>
+              <mu-icon value="pan_tool" slot="right"/>
+            </mu-list-item>
+            <mu-list-item title="Maco Mai">
+              <mu-avatar src="/images/avatar2.jpg" slot="leftAvatar"/>
+              <mu-icon value="pan_tool" slot="right"/>
+            </mu-list-item>
+            <mu-list-item title="Alex Qin">
+              <mu-avatar src="/images/avatar3.jpg" slot="leftAvatar"/>
+              <mu-icon value="pan_tool" slot="right"/>
+            </mu-list-item>
+            <mu-list-item title="Allen Qun">
+              <mu-avatar src="/images/avatar4.jpg" slot="leftAvatar"/>
+              <mu-icon value="pan_tool" slot="right"/>
+            </mu-list-item>
+            <mu-list-item title="Myron Liu">
+              <mu-avatar src="/images/uicon.jpg" slot="leftAvatar"/>
+              <mu-icon value="pan_tool" slot="right"/>
+            </mu-list-item>
+          </mu-list>
+        </mu-list>
+      </mu-drawer>
     </div>
   </div>
 </template>
@@ -28,7 +55,8 @@ export default {
   },
   data () {
     return {
-      select: '1'
+      select: '1',
+      friendsDrawer: true
     }
   },
   mounted: function () {
@@ -36,6 +64,9 @@ export default {
   methods: {
     selectMenuChange (val) {
       this.select = val
+    },
+    toggleFriendsDrawer () {
+      this.friendsDrawer = !this.friendsDrawer
     },
     upload (event) {
       let file = event.target.files[0]
@@ -52,9 +83,9 @@ export default {
       axios.post('http://localhost:3000/upload', formData, config).then(function (res) {
       })
     },
-    play () {
-      const url = `http://localhost:3000/template.html?roomId=1000&gameId=1000&id=1`
-      let win = new BrowserWindow({ width: 1400, height: 700 })
+    openFriendsWindow () {
+      const url = `/friends`
+      let win = new BrowserWindow({ width: 200, height: 600 })
       win.on('close', () => {
         win = null
       })
@@ -66,7 +97,9 @@ export default {
 </script>
 
 <style lang='less'>
-
+.friend-item {
+  position: relative;
+}
 .content {
   height: 100%;
   overflow: hidden;

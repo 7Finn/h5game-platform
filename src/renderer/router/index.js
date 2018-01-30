@@ -16,6 +16,11 @@ export default new Router({
       component: require('@/views/StorePage').default
     },
     {
+      path: '/friends',
+      name: 'friends',
+      component: require('@/views/FriendsPage').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
