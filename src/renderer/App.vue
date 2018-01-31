@@ -16,16 +16,18 @@
 </template>
 
 <script>
+// import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
       activeNav: 'main',
       open: true,
       docked: true,
-      title: ''
+      userid: Date.now()
     }
   },
   mounted () {
+    this.init()
   },
   methods: {
     handleNavChange (val) {
@@ -33,6 +35,11 @@ export default {
     },
     handleMenuChange (path) {
       if (!this.desktop) this.open = false
+    },
+    init () {
+      // this.setSocket()
+      // 告诉服务器端有用户登录
+      // this.socket.emit('login', { userid: this.userid, username: 'finnwu' })
     }
   }
 }

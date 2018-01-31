@@ -13,30 +13,28 @@
         <mu-raised-button class="demo-raised-button" icon="android" backgroundColor="#a4c639" />
       </div>
       <mu-drawer right :open="friendsDrawer" :docked="false" @close="toggleFriendsDrawer">
-        <mu-list>
-          <mu-list>
-            <mu-sub-header>邀请好友</mu-sub-header>
-            <mu-list-item title="Mike Li">
-              <mu-avatar src="/images/avatar1.jpg" slot="leftAvatar"/>
-              <mu-icon value="pan_tool" slot="right"/>
-            </mu-list-item>
-            <mu-list-item title="Maco Mai">
-              <mu-avatar src="/images/avatar2.jpg" slot="leftAvatar"/>
-              <mu-icon value="pan_tool" slot="right"/>
-            </mu-list-item>
-            <mu-list-item title="Alex Qin">
-              <mu-avatar src="/images/avatar3.jpg" slot="leftAvatar"/>
-              <mu-icon value="pan_tool" slot="right"/>
-            </mu-list-item>
-            <mu-list-item title="Allen Qun">
-              <mu-avatar src="/images/avatar4.jpg" slot="leftAvatar"/>
-              <mu-icon value="pan_tool" slot="right"/>
-            </mu-list-item>
-            <mu-list-item title="Myron Liu">
-              <mu-avatar src="/images/uicon.jpg" slot="leftAvatar"/>
-              <mu-icon value="pan_tool" slot="right"/>
-            </mu-list-item>
-          </mu-list>
+        <mu-list @itemClick="invite">
+          <mu-sub-header>邀请好友</mu-sub-header>
+          <mu-list-item title="Mike Li">
+            <mu-avatar src="/images/avatar1.jpg" slot="leftAvatar"/>
+            <mu-icon value="pan_tool" slot="right"/>
+          </mu-list-item>
+          <mu-list-item title="Maco Mai">
+            <mu-avatar src="/images/avatar2.jpg" slot="leftAvatar"/>
+            <mu-icon value="pan_tool" slot="right"/>
+          </mu-list-item>
+          <mu-list-item title="Alex Qin">
+            <mu-avatar src="/images/avatar3.jpg" slot="leftAvatar"/>
+            <mu-icon value="pan_tool" slot="right"/>
+          </mu-list-item>
+          <mu-list-item title="Allen Qun">
+            <mu-avatar src="/images/avatar4.jpg" slot="leftAvatar"/>
+            <mu-icon value="pan_tool" slot="right"/>
+          </mu-list-item>
+          <mu-list-item title="Myron Liu">
+            <mu-avatar src="/images/uicon.jpg" slot="leftAvatar"/>
+            <mu-icon value="pan_tool" slot="right"/>
+          </mu-list-item>
         </mu-list>
       </mu-drawer>
     </div>
@@ -56,7 +54,7 @@ export default {
   data () {
     return {
       select: '1',
-      friendsDrawer: true
+      friendsDrawer: false
     }
   },
   mounted: function () {
@@ -67,6 +65,16 @@ export default {
     },
     toggleFriendsDrawer () {
       this.friendsDrawer = !this.friendsDrawer
+    },
+    invite (item) {
+      const url = `http://localhost:3000/template`
+      let win = new BrowserWindow({ width: 1000, height: 1200 })
+      win.maximize()
+      win.on('close', () => {
+        win = null
+      })
+      win.loadURL(url)
+      win.show()
     },
     upload (event) {
       let file = event.target.files[0]
@@ -82,15 +90,6 @@ export default {
 
       axios.post('http://localhost:3000/upload', formData, config).then(function (res) {
       })
-    },
-    openFriendsWindow () {
-      const url = `/friends`
-      let win = new BrowserWindow({ width: 200, height: 600 })
-      win.on('close', () => {
-        win = null
-      })
-      win.loadURL(url)
-      win.show()
     }
   }
 }
