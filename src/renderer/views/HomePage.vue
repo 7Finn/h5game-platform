@@ -9,62 +9,36 @@
       </div>
       <div class="bottom-buttons" >
         <mu-raised-button class="demo-raised-button" label="自己玩" icon="android" primary/>
-        <mu-raised-button class="demo-raised-button" @click="toggleFriendsDrawer" label="邀请好友" icon="android" primary/>
+        <mu-raised-button class="demo-raised-button" @click="openFriendsDrawer" label="邀请好友" icon="android" primary/>
         <mu-raised-button class="demo-raised-button" icon="android" backgroundColor="#a4c639" />
       </div>
-      <mu-drawer right :open="friendsDrawer" :docked="false" @close="toggleFriendsDrawer">
-        <mu-list @itemClick="invite">
-          <mu-sub-header>邀请好友</mu-sub-header>
-          <mu-list-item title="Mike Li">
-            <mu-avatar src="/images/avatar1.jpg" slot="leftAvatar"/>
-            <mu-icon value="pan_tool" slot="right"/>
-          </mu-list-item>
-          <mu-list-item title="Maco Mai">
-            <mu-avatar src="/images/avatar2.jpg" slot="leftAvatar"/>
-            <mu-icon value="pan_tool" slot="right"/>
-          </mu-list-item>
-          <mu-list-item title="Alex Qin">
-            <mu-avatar src="/images/avatar3.jpg" slot="leftAvatar"/>
-            <mu-icon value="pan_tool" slot="right"/>
-          </mu-list-item>
-          <mu-list-item title="Allen Qun">
-            <mu-avatar src="/images/avatar4.jpg" slot="leftAvatar"/>
-            <mu-icon value="pan_tool" slot="right"/>
-          </mu-list-item>
-          <mu-list-item title="Myron Liu">
-            <mu-avatar src="/images/uicon.jpg" slot="leftAvatar"/>
-            <mu-icon value="pan_tool" slot="right"/>
-          </mu-list-item>
-        </mu-list>
-      </mu-drawer>
     </div>
+    <friends-drawer :list="[]"></friends-drawer>
   </div>
 </template>
 
 <script>
 import { remote } from 'electron'
+import { mapActions } from 'vuex'
 import axios from 'axios'
 import AppNavDrawer from '../components/AppNavDrawer'
+import FriendsDrawer from '../components/FriendsDrawer'
 const BrowserWindow = remote.BrowserWindow
 
 export default {
   components: {
-    'app-nav': AppNavDrawer
+    'app-nav': AppNavDrawer,
+    'friends-drawer': FriendsDrawer
   },
   data () {
     return {
-      select: '1',
-      friendsDrawer: false
+      select: '1'
     }
   },
-  mounted: function () {
-  },
   methods: {
+    ...mapActions(['openFriendsDrawer']),
     selectMenuChange (val) {
       this.select = val
-    },
-    toggleFriendsDrawer () {
-      this.friendsDrawer = !this.friendsDrawer
     },
     invite (item) {
       const url = `http://localhost:3000/template`

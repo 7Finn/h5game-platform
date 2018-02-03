@@ -12,12 +12,19 @@
     <div class="platform-content">
       <router-view></router-view>
     </div>
+    <invite-pop-up></invite-pop-up>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import InvitePopUp from './components/InvitePopUp'
+
 // import { mapState, mapActions } from 'vuex'
 export default {
+  components: {
+    'invite-pop-up': InvitePopUp
+  },
   data () {
     return {
       activeNav: 'main',
@@ -30,6 +37,7 @@ export default {
     this.init()
   },
   methods: {
+    ...mapActions(['openInvitePopUp']),
     handleNavChange (val) {
       this.activeNav = val
     },
@@ -39,7 +47,10 @@ export default {
     init () {
       // this.setSocket()
       // 告诉服务器端有用户登录
-      // this.socket.emit('login', { userid: this.userid, username: 'finnwu' })
+      this.$socket.emit('login', { userid: this.userid, username: 'finnwu' })
+      this.$socket.on('invite', () => {
+        this.openInvitePopUp()
+      })
     }
   }
 }
