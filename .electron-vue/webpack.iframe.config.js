@@ -20,10 +20,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
  */
 let whiteListedModules = ['vue']
 
-let rendererConfig = {
+let iframeConfig = {
   devtool: '#cheap-module-eval-source-map',
   entry: {
-    renderer: path.join(__dirname, '../src/renderer/main.js')
+    iframe: path.join(__dirname, '../src/iframe/main.js')
   },
   externals: [
     ...Object.keys(dependencies || {}).filter(d => !whiteListedModules.includes(d))
@@ -111,8 +111,8 @@ let rendererConfig = {
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, '../src/renderer/index.ejs'),
+      filename: 'iframe.html',
+      template: path.resolve(__dirname, '../src/iframe/index.ejs'),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -141,10 +141,10 @@ let rendererConfig = {
 }
 
 /**
- * Adjust rendererConfig for development settings
+ * Adjust iframeConfig for development settings
  */
 if (process.env.NODE_ENV !== 'production') {
-  rendererConfig.plugins.push(
+  iframeConfig.plugins.push(
     new webpack.DefinePlugin({
       '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`
     })
@@ -152,12 +152,12 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 /**
- * Adjust rendererConfig for production settings
+ * Adjust iframeConfig for production settings
  */
 if (process.env.NODE_ENV === 'production') {
-  rendererConfig.devtool = ''
+  iframeConfig.devtool = ''
 
-  rendererConfig.plugins.push(
+  iframeConfig.plugins.push(
     new BabiliWebpackPlugin(),
     new CopyWebpackPlugin([
       {
@@ -175,4 +175,4 @@ if (process.env.NODE_ENV === 'production') {
   )
 }
 
-module.exports = rendererConfig
+module.exports = iframeConfig

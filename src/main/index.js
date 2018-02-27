@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -33,6 +33,10 @@ function createWindow () {
     mainWindow = null
   })
 }
+
+ipcMain.on('open-iframe', (event, arg) => {
+  mainWindow.webContents.send('open-iframe', arg)
+})
 
 app.on('ready', createWindow)
 

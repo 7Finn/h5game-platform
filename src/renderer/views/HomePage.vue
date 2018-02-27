@@ -8,7 +8,7 @@
         <p>title</p>
       </div>
       <div class="bottom-buttons" >
-        <mu-raised-button class="demo-raised-button" label="自己玩" icon="android" primary/>
+        <mu-raised-button class="demo-raised-button" label="自己玩" icon="android" primary @click="invite"/>
         <mu-raised-button class="demo-raised-button" @click="openFriendsDrawer" label="邀请好友" icon="android" primary/>
         <mu-raised-button class="demo-raised-button" icon="android" backgroundColor="#a4c639" />
       </div>
@@ -41,8 +41,11 @@ export default {
       this.select = val
     },
     invite (item) {
-      const url = `http://localhost:3000/template`
+      const url = `http://localhost:9090/iframe.html`
       let win = new BrowserWindow({ width: 1000, height: 1200 })
+      win.webContents.on('did-finish-load', () => {
+        win.webContents.send('ping', 'whoooooooh!')
+      })
       win.maximize()
       win.on('close', () => {
         win = null

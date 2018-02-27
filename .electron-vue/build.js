@@ -12,6 +12,7 @@ const Multispinner = require('multispinner')
 const buildConfig = require('./build.config')
 const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
+const iframeConfig = requeire('./webpack.iframe.config')
 const webConfig = require('./webpack.web.config')
 
 const doneLog = chalk.bgGreen.white(' DONE ') + ' '
@@ -65,6 +66,16 @@ function build () {
   }).catch(err => {
     m.error('renderer')
     console.log(`\n  ${errorLog}failed to build renderer process`)
+    console.error(`\n${err}\n`)
+    process.exit(1)
+  })
+
+  pack(iframeConfig).then(result => {
+    results += result + '\n\n'
+    m.success('iframe')
+  }).catch(err => {
+    m.error('iframe')
+    console.log(`\n  ${errorLog}failed to build iframe process`)
     console.error(`\n${err}\n`)
     process.exit(1)
   })
