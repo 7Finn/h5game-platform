@@ -20,6 +20,7 @@
 <script>
 import { remote } from 'electron'
 import { mapActions } from 'vuex'
+import { ROLE } from '../tools/vars'
 import axios from 'axios'
 import AppNavDrawer from '../components/AppNavDrawer'
 import FriendsDrawer from '../components/FriendsDrawer'
@@ -43,9 +44,17 @@ export default {
     invite (item) {
       const url = `http://localhost:9090/iframe.html`
       let win = new BrowserWindow({ width: 1000, height: 1200 })
+      const arg = {
+        roomId: 1000,
+        gameId: 1000,
+        role: ROLE.PLAYER,
+        userId: 1
+      }
+      // 通知页面游戏房间信息
       win.webContents.on('did-finish-load', () => {
-        win.webContents.send('ping', 'whoooooooh!')
+        win.webContents.send('init', arg)
       })
+      // 房间初始化
       win.maximize()
       win.on('close', () => {
         win = null
