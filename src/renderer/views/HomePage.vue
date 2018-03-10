@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="home-content">
     <mu-paper class="content-left" :zDepth="1" :rounded="false">
       <app-nav :list="[]" @selectChange="selectMenuChange"></app-nav>
     </mu-paper>
@@ -85,8 +85,9 @@ export default {
 .friend-item {
   position: relative;
 }
-.content {
+.home-content {
   height: 100%;
+  background-image: url(../assets/science.png);
   overflow: hidden;
 }
 

@@ -1,4 +1,9 @@
-  <template>
+<template>
+  <div class="height-100">
+    <mu-list-item title="Finn" @click="handleProfileClick">
+      <mu-avatar src="" slot="leftAvatar"/>
+    </mu-list-item>
+    <mu-divider/>
     <mu-list class="content-appbar" :value="select" @change="handleSelectChange">
       <mu-sub-header>最近的游戏</mu-sub-header>
       <mu-list-item title="拼图游戏" value="1" :class="{ active: select === '1'}">
@@ -14,9 +19,11 @@
         </mu-icon-menu>
       </mu-list-item>
     </mu-list>
+  </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   props: {
     list: {
@@ -29,10 +36,23 @@ export default {
       select: '1'
     }
   },
+  computed: {
+    ...mapState({
+      loginState: state => state.UserState.login
+    })
+  },
   methods: {
+    ...mapActions(['openProfileDialog', 'openLoginDialog']),
     handleSelectChange (val) {
       this.select = val
       this.$emit('selectChange', val)
+    },
+    handleProfileClick () {
+      if (this.loginState) {
+        this.openProfileDialog()
+      } else {
+        this.openLoginDialog()
+      }
     }
   },
   mounted () {
@@ -45,7 +65,11 @@ export default {
   height: 100%;
 }
 
-.active {
-  background-color: #eee;
+.height-100 {
+  height: 100%;
 }
+
+// .active {
+//   background-color: #eee;
+// }
 </style>

@@ -16,6 +16,11 @@ export default new Router({
       component: require('@/views/StorePage').default
     },
     {
+      path: '/item/:id',
+      name: 'item',
+      component: require('@/views/ItemPage').default
+    },
+    {
       path: '/friends',
       name: 'friends',
       component: require('@/views/FriendsPage').default

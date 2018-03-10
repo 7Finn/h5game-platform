@@ -1,6 +1,7 @@
 <template>
   <mu-drawer right :open="open" :docked="false" @close="closeFriendsDrawer">
     <mu-list @itemClick="invite">
+      <mu-text-field hintText="搜索昵称" icon="search"/><br/>
       <mu-sub-header>邀请好友</mu-sub-header>
       <mu-list-item title="Mike Li">
         <mu-avatar src="" slot="leftAvatar"/>

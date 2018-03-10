@@ -1,15 +1,26 @@
 <template>
-  <div>
-    <iframe class="left-frame" :src="leftUrl" frameborder="0"></iframe>
-    <iframe class="right-frame" :src="rightUrl" frameborder="0"></iframe>
+  <div class="height-100">
+    <mu-flexbox :gutter="0" align="stretch" class="height-100">
+      <mu-flexbox-item>
+        <iframe class="left-frame" :src="leftUrl" frameborder="0"></iframe>
+      </mu-flexbox-item>
+      <mu-flexbox-item>
+        <iframe class="right-frame" :src="rightUrl" frameborder="0"></iframe>
+      </mu-flexbox-item>
+    </mu-flexbox>
+    <waiting-join-dialog></waiting-join-dialog>
   </div>
 </template>
 
 <script>
 import { ipcRenderer } from 'electron'
 import { config } from './tools/config'
+import WaitingJoinDialog from './components/WaitingJoinDialog'
 
 export default {
+  components: {
+    'waiting-join-dialog': WaitingJoinDialog
+  },
   data () {
     ipcRenderer.on('init', (event, arg) => {
       this.gameId = arg.gameId
@@ -35,13 +46,23 @@ export default {
 
 
 <style lang="less">
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+.height-100 {
+  height: 100%;
+}
+
 .left-frame {
-  width: 48%;
-  height: 1000px;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #d32f2f;
 }
 
 .right-frame {
-  width: 48%;
-  height: 1000px;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #4caf50;
 }
 </style>
