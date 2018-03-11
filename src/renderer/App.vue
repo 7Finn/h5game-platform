@@ -5,7 +5,7 @@
         <mu-bottom-nav :value="activeNav" shift @change="handleNavChange">
           <mu-bottom-nav-item to="/" value="home" title="Home" icon="star"/>
           <mu-bottom-nav-item to="/store" value="store" title="Store" icon="inbox"/>
-          <mu-bottom-nav-item value="books" title="Books" icon="books"/>
+          <mu-bottom-nav-item to="/profile" value="books" title="Profile" icon="books"/>
         </mu-bottom-nav>
       </mu-paper>
     </div>

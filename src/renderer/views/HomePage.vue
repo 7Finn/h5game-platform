@@ -18,13 +18,12 @@
 </template>
 
 <script>
-import { remote } from 'electron'
+import { ipcRenderer } from 'electron'
 import { mapActions } from 'vuex'
 import { ROLE } from '../tools/vars'
 import axios from 'axios'
 import AppNavDrawer from '../components/AppNavDrawer'
 import FriendsDrawer from '../components/FriendsDrawer'
-const BrowserWindow = remote.BrowserWindow
 
 export default {
   components: {
@@ -42,25 +41,16 @@ export default {
       this.select = val
     },
     invite (item) {
-      const url = `http://localhost:9090/iframe.html`
-      let win = new BrowserWindow({ width: 1000, height: 1200 })
       const arg = {
-        roomId: 1000,
-        gameId: 1000,
-        role: ROLE.PLAYER,
-        userId: 1
+        url: `http://localhost:9090/iframe.html`,
+        init: {
+          roomId: 1000,
+          gameId: 1000,
+          role: ROLE.PLAYER,
+          userId: 1
+        }
       }
-      // 通知页面游戏房间信息
-      win.webContents.on('did-finish-load', () => {
-        win.webContents.send('init', arg)
-      })
-      // 房间初始化
-      win.maximize()
-      win.on('close', () => {
-        win = null
-      })
-      win.loadURL(url)
-      win.show()
+      ipcRenderer.send('open-iframe', arg)
     },
     upload (event) {
       let file = event.target.files[0]

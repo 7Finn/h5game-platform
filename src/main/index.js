@@ -11,13 +11,14 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
+let frameWindow
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
 function createWindow () {
   /**
-   * Initial window options
+   * 初始化主线程
    */
   Menu.setApplicationMenu(null)
 
@@ -27,6 +28,8 @@ function createWindow () {
     width: 1000
   })
 
+  mainWindow.maximize()
+
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
@@ -34,8 +37,43 @@ function createWindow () {
   })
 }
 
+function createIframeWindow (arg) {
+  /**
+   * 创建对战窗口
+   */
+  Menu.setApplicationMenu(null)
+
+  frameWindow = new BrowserWindow({
+    height: 563,
+    useContentSize: true,
+    show: false,
+    width: 1000
+  })
+
+  frameWindow.maximize()
+
+  frameWindow.loadURL(arg.url)
+
+  frameWindow.on('closed', () => {
+    frameWindow = null
+  })
+
+  frameWindow.webContents.on('did-finish-load', () => {
+    frameWindow.webContents.send('init', arg.init)
+  })
+
+  frameWindow.on('ready-to-show', () => {
+    frameWindow.show()
+    frameWindow.focus()
+  })
+}
+
 ipcMain.on('open-iframe', (event, arg) => {
-  mainWindow.webContents.send('open-iframe', arg)
+  createIframeWindow(arg)
+})
+
+ipcMain.on('close-iframe', (event, arg) => {
+  frameWindow.close()
 })
 
 app.on('ready', createWindow)

@@ -1,10 +1,10 @@
 <template>
   <mu-dialog :open="open" @close="closeProfileDialog">
-    <mu-list-item disabled :describeText="'ID:' + account">
+    <mu-list-item disabled :describeText="'ID: ' + account">
       <mu-avatar slot="left" :src="avatarPath" class="avatar-pciker">
         <input type="file" class="file-button" accept="image/png,image/gif,image/jpeg" @change="upload">
       </mu-avatar>
-      <mu-text-field slot="title" :value="username"/><br/>
+      <mu-text-field slot="title" :value="nickname"/><br/>
     </mu-list-item>
     <mu-flat-button slot="actions" @click="closeProfileDialog" primary label="取消"/>
     <mu-flat-button slot="actions" @click="closeProfileDialog" primary label="保存"/>
@@ -23,7 +23,7 @@ export default {
     ...mapState({
       open: state => state.ProfileDialog.open,
       account: state => state.UserState.account,
-      username: state => state.UserState.username
+      nickname: state => state.UserState.nickname
     })
   },
   methods: {

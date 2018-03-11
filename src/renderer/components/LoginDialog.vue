@@ -7,7 +7,7 @@
       :fullWidth="true" :errorText="passwordErrorText" v-model="password"/><br/>
     <p class="registeTips">没有账号？点击<a href="javascript:void(0)" @click="switchToRegiste">注册</a></p>
     <mu-flat-button slot="actions" @click="closeLoginDialog" primary label="取消"/>
-    <mu-flat-button slot="actions" @click="closeLoginDialog" primary label="登录"/>
+    <mu-flat-button slot="actions" @click="login" primary label="登录"/>
   </mu-dialog>
 </template>
 
@@ -29,10 +29,25 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['openRegisteDialog', 'closeLoginDialog']),
+    ...mapActions(['openRegisteDialog', 'closeLoginDialog', 'loginUserState']),
     switchToRegiste () {
       this.closeLoginDialog()
       this.openRegisteDialog()
+    },
+    login () {
+      if (this.check()) {
+        this.$http.post('http://localhost:3000/users/login', {
+          account: this.account,
+          password: this.password
+        }).then(res => {
+          if (res.data.ret === 0) {
+            this.loginUserState(res.data.user)
+            this.closeLoginDialog()
+          } else {
+            console.log(res.data)
+          }
+        })
+      }
     },
     check () {
       const rules = {

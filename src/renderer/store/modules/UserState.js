@@ -1,13 +1,15 @@
 const state = {
-  login: true,
+  login: false,
   online: false,
-  account: '879788904',
-  username: 'Finn'
+  account: '',
+  nickname: '未登录'
 }
 
 const mutations = {
-  LOGIN_USERSTATE (state) {
+  LOGIN_USERSTATE (state, user) {
     state.login = true
+    state.account = user.account
+    state.nickname = user.nickname
   },
   LOGOUT_USERSTATE (state) {
     state.login = false
@@ -15,8 +17,8 @@ const mutations = {
 }
 
 const actions = {
-  loginUserState ({ commit }) {
-    commit('LOGIN_USERSTATE')
+  loginUserState ({ commit }, payload) {
+    commit('LOGIN_USERSTATE', payload)
   },
   logoutUserState ({ commit }) {
     commit('LOGOUT_USERSTATE')

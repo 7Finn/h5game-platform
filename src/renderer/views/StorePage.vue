@@ -50,7 +50,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .store-content {
   background-image: url(../assets/science.png);
   text-align: left;

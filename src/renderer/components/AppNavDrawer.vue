@@ -1,6 +1,6 @@
 <template>
   <div class="height-100">
-    <mu-list-item title="Finn" @click="handleProfileClick">
+    <mu-list-item :title="userNickname" @click="handleProfileClick">
       <mu-avatar src="" slot="leftAvatar"/>
     </mu-list-item>
     <mu-divider/>
@@ -38,7 +38,8 @@ export default {
   },
   computed: {
     ...mapState({
-      loginState: state => state.UserState.login
+      loginState: state => state.UserState.login,
+      userNickname: state => state.UserState.nickname
     })
   },
   methods: {

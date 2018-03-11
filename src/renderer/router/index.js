@@ -21,9 +21,9 @@ export default new Router({
       component: require('@/views/ItemPage').default
     },
     {
-      path: '/friends',
-      name: 'friends',
-      component: require('@/views/FriendsPage').default
+      path: '/profile',
+      name: 'profile',
+      component: require('@/views/ProfilePage').default
     },
     {
       path: '*',
