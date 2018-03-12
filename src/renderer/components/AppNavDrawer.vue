@@ -5,16 +5,16 @@
     </mu-list-item>
     <mu-divider/>
     <mu-list class="content-appbar" :value="select" @change="handleSelectChange">
-      <mu-sub-header>最近的游戏</mu-sub-header>
+      <mu-sub-header>收藏的游戏</mu-sub-header>
       <mu-list-item title="拼图游戏" value="1" :class="{ active: select === '1'}">
         <mu-avatar src="" slot="leftAvatar"/>
-        <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+        <mu-icon-menu class="mt5" slot="right" icon="more_vert" :anchorOrigin="anchorOrigin" :targetOrigin="targetOrigin">
           <mu-menu-item title="删除" />
         </mu-icon-menu>
       </mu-list-item>
       <mu-list-item title="跳一跳" value="2" :class="{ active: select === '2'}">
         <mu-avatar src="" slot="leftAvatar"/>
-        <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+        <mu-icon-menu class="mt5" slot="right" icon="more_vert" :anchorOrigin="anchorOrigin" :targetOrigin="targetOrigin">
           <mu-menu-item title="删除" />
         </mu-icon-menu>
       </mu-list-item>
@@ -33,7 +33,9 @@ export default {
   },
   data () {
     return {
-      select: '1'
+      select: '1',
+      anchorOrigin: { 'vertical': 'bottom', 'horizontal': 'left' },
+      targetOrigin: { 'vertical': 'top', 'horizontal': 'left' }
     }
   },
   computed: {
@@ -68,6 +70,10 @@ export default {
 
 .height-100 {
   height: 100%;
+}
+
+.mt5 {
+  margin-top: 5px;
 }
 
 // .active {

@@ -55,8 +55,9 @@ export default {
   background-image: url(../assets/science.png);
   text-align: left;
   height: 100%;
-  padding: 20px;
-  overflow: hidden;
+  padding: 0 20px 0 20px;
+  overflow-y: auto;
+  overflow-x: scroll;
 }
 
 .store-container {

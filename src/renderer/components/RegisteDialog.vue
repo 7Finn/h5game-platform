@@ -39,8 +39,16 @@ export default {
       open: state => state.RegisteDialog.open
     })
   },
+  mounted () {
+    this.$socket.on('registe', (data) => {
+      if (data.ret === 0) {
+        this.closeRegisteDialog()
+        this.openSnackbar('注册成功')
+      }
+    })
+  },
   methods: {
-    ...mapActions(['openLoginDialog', 'closeRegisteDialog']),
+    ...mapActions(['openLoginDialog', 'closeRegisteDialog', 'openSnackbar']),
     handleInputOverflow (isOverflow, text) {
       this.$data[text + 'ErrorText'] = isOverflow ? '超过啦！！！' : ''
     },
@@ -49,7 +57,12 @@ export default {
       this.openLoginDialog()
     },
     registe () {
-      this.check()
+      if (this.check()) {
+        this.$socket.emit('registe', {
+          account: this.account,
+          password: this.password
+        })
+      }
     },
     clearStatus (event) {
       const name = event.target.name
@@ -75,7 +88,8 @@ export default {
 
       const param = {
         account: String(this.account).trim(),
-        password: String(this.password).trim()
+        password: String(this.password).trim(),
+        repassword: String(this.repassword).trim()
       }
 
       const args = {

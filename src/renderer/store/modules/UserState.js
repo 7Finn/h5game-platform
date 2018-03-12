@@ -2,7 +2,8 @@ const state = {
   login: false,
   online: false,
   account: '',
-  nickname: '未登录'
+  nickname: '未登录',
+  friends: []
 }
 
 const mutations = {
@@ -10,6 +11,7 @@ const mutations = {
     state.login = true
     state.account = user.account
     state.nickname = user.nickname
+    state.friends = user.friends
   },
   LOGOUT_USERSTATE (state) {
     state.login = false

@@ -32,13 +32,20 @@
           <mu-linear-progress v-show="searching"/>
           <mu-card-title subTitle="添加好友"/>
           <mu-card-actions class="search-input">
-            <mu-text-field hintText="搜索账号" fullWidth icon="search" v-model="searchKey" @change="search"/><br/>
+            <mu-text-field hintText="搜索昵称" fullWidth icon="search" v-model="searchKey" @change="search"/><br/>
           </mu-card-actions>
-          <mu-list-item v-if="searchResult" :title="searchResult.nickname" :describeText="invited ? '申请已提交' : ''" @click="invite">
+          <mu-list-item disabled v-if="searchResult" :title="searchResult.nickname" :describeText="added ? '申请已提交' : ''" >
             <mu-avatar :src="searchResult.avatar" slot="leftAvatar"/>
-            <mu-icon v-show="!invited" value="add" slot="right"/>
+            <mu-icon-button class="mt5" v-show="!added" icon="add" slot="right" @click="addContact"/>
           </mu-list-item>
           <mu-sub-header>申请列表</mu-sub-header>
+          <mu-list-item title="Mike Li" disabled>
+            <mu-avatar src="" slot="leftAvatar"/>
+            <mu-icon-menu class="mt5" slot="right" icon="more_vert" :anchorOrigin="rightTop" :targetOrigin="rightTop">
+              <mu-menu-item title="同意" />
+              <mu-menu-item title="忽略" />
+            </mu-icon-menu>
+          </mu-list-item>
         </mu-card>
         <mu-card class="mt8">
           <mu-card-title subTitle="我的好友"/>
@@ -90,8 +97,9 @@ export default {
     return {
       searchKey: '',
       searching: false,
-      invited: false,
-      searchResult: null
+      added: false,
+      searchResult: null,
+      rightTop: {horizontal: 'right', vertical: 'top'}
     }
   },
   computed: {
@@ -101,22 +109,32 @@ export default {
       userAccount: state => state.UserState.account
     })
   },
+  mounted () {
+    this.$socket.on('search', data => {
+      this.searching = false
+      this.searchResult = data.user
+    })
+
+    this.$socket.on('add-contact', data => {
+      console.log(data)
+      if (data.ret === 0) {
+        this.added = true
+      } else {
+        this.added = false
+      }
+    })
+  },
   methods: {
     ...mapActions(['openProfileDialog']),
     search () {
+      this.$socket.emit('search', { nickname: this.searchKey })
       this.searching = true
-      this.$http.get(`http://localhost:3000/users/search?key=${this.searchKey}`)
-        .then(res => {
-          this.invited = false
-          this.searchResult = res.data.user
-          this.searching = false
-        })
-        .catch(() => {
-          this.searching = false
-        })
+      this.added = false
     },
-    invite () {
-      this.invited = true
+    addContact () {
+      this.$socket.emit('add-contact', {
+        nickname: this.searchResult.nickname
+      })
     }
   }
 }
@@ -143,6 +161,10 @@ export default {
 
 .mt8 {
   margin-top: 8px;
+}
+
+.mt5 {
+  margin-top: 5px;
 }
 
 .search-input {

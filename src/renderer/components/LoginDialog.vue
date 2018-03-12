@@ -28,24 +28,27 @@ export default {
       open: state => state.LoginDialog.open
     })
   },
+  mounted () {
+    this.$socket.on('login', (data) => {
+      console.log(data)
+      if (data.ret === 0) {
+        this.loginUserState(data.user)
+        this.closeLoginDialog()
+        this.openSnackbar('登录成功')
+      }
+    })
+  },
   methods: {
-    ...mapActions(['openRegisteDialog', 'closeLoginDialog', 'loginUserState']),
+    ...mapActions(['openRegisteDialog', 'closeLoginDialog', 'loginUserState', 'openSnackbar']),
     switchToRegiste () {
       this.closeLoginDialog()
       this.openRegisteDialog()
     },
     login () {
       if (this.check()) {
-        this.$http.post('http://localhost:3000/users/login', {
+        this.$socket.emit('login', {
           account: this.account,
           password: this.password
-        }).then(res => {
-          if (res.data.ret === 0) {
-            this.loginUserState(res.data.user)
-            this.closeLoginDialog()
-          } else {
-            console.log(res.data)
-          }
         })
       }
     },

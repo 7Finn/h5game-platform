@@ -5,7 +5,7 @@
         <mu-bottom-nav :value="activeNav" shift @change="handleNavChange">
           <mu-bottom-nav-item to="/" value="home" title="Home" icon="star"/>
           <mu-bottom-nav-item to="/store" value="store" title="Store" icon="inbox"/>
-          <mu-bottom-nav-item to="/profile" value="books" title="Profile" icon="books"/>
+          <mu-bottom-nav-item value="profile" title="Profile" icon="books"/>
         </mu-bottom-nav>
       </mu-paper>
     </div>
@@ -16,16 +16,16 @@
     <login-dialog></login-dialog>
     <registe-dialog></registe-dialog>
     <profile-dialog></profile-dialog>
+    <mu-snackbar v-if="snackbar" :message="snackbarMsg" action="关闭" @actionClick="closeSnackbar" @close="closeSnackbar"/>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import InvitePopUp from './components/InvitePopUp'
 import LoginDialog from './components/LoginDialog'
 import RegisteDialog from './components/RegisteDialog'
 import ProfileDialog from './components/ProfileDialog'
-// import { mapState, mapActions } from 'vuex'
 export default {
   components: {
     'invite-pop-up': InvitePopUp,
@@ -41,13 +41,30 @@ export default {
       userid: Date.now()
     }
   },
+  computed: {
+    ...mapState({
+      loginState: state => state.UserState.login,
+      userNickname: state => state.UserState.nickname,
+      snackbar: state => state.Snackbar.open,
+      snackbarMsg: state => state.Snackbar.message
+    })
+  },
   mounted () {
     this.init()
   },
   methods: {
-    ...mapActions(['openInvitePopUp']),
+    ...mapActions(['openInvitePopUp', 'openLoginDialog', 'openSnackbar', 'closeSnackbar']),
     handleNavChange (val) {
-      this.activeNav = val
+      if (val === 'profile') {
+        if (this.loginState) {
+          this.$router.push('/profile')
+          this.activeNav = val
+        } else {
+          this.openLoginDialog()
+        }
+      } else {
+        this.activeNav = val
+      }
     },
     handleMenuChange (path) {
       if (!this.desktop) this.open = false
@@ -55,9 +72,16 @@ export default {
     init () {
       // this.setSocket()
       // 告诉服务器端有用户登录
-      this.$socket.emit('login', { userid: this.userid, username: 'finnwu' })
       this.$socket.on('invite', () => {
         this.openInvitePopUp()
+      })
+
+      this.$socket.on('disconnect', () => {
+        this.openSnackbar('你已离线')
+      })
+
+      this.$socket.on('has-applicant-msg', () => {
+        this.openSnackbar('你有新的好友请求')
       })
     }
   }
