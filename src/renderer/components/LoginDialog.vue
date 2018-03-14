@@ -28,16 +28,6 @@ export default {
       open: state => state.LoginDialog.open
     })
   },
-  mounted () {
-    this.$socket.on('login', (data) => {
-      console.log(data)
-      if (data.ret === 0) {
-        this.loginUserState(data.user)
-        this.closeLoginDialog()
-        this.openSnackbar('登录成功')
-      }
-    })
-  },
   methods: {
     ...mapActions(['openRegisteDialog', 'closeLoginDialog', 'loginUserState', 'openSnackbar']),
     switchToRegiste () {

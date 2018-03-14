@@ -32,6 +32,8 @@ export default {
 
 <style lang="less">
 .item-page-content {
+  height: 100%;
+  padding: 20px;
 }
 </style>
 

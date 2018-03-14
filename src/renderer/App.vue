@@ -50,7 +50,7 @@ export default {
     })
   },
   mounted () {
-    this.init()
+    this.openLoginDialog()
   },
   methods: {
     ...mapActions(['openInvitePopUp', 'openLoginDialog', 'openSnackbar', 'closeSnackbar']),
@@ -68,21 +68,6 @@ export default {
     },
     handleMenuChange (path) {
       if (!this.desktop) this.open = false
-    },
-    init () {
-      // this.setSocket()
-      // 告诉服务器端有用户登录
-      this.$socket.on('invite', () => {
-        this.openInvitePopUp()
-      })
-
-      this.$socket.on('disconnect', () => {
-        this.openSnackbar('你已离线')
-      })
-
-      this.$socket.on('has-applicant-msg', () => {
-        this.openSnackbar('你有新的好友请求')
-      })
     }
   }
 }

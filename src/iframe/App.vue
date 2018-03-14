@@ -2,9 +2,11 @@
   <div class="height-100">
     <mu-flexbox :gutter="0" align="stretch" class="height-100">
       <mu-flexbox-item>
+        <div class="left-cover"></div>
         <iframe class="left-frame" :src="leftUrl" frameborder="0"></iframe>
       </mu-flexbox-item>
       <mu-flexbox-item>
+        <!-- <div class="right-cover"></div> -->
         <iframe class="right-frame" :src="rightUrl" frameborder="0"></iframe>
       </mu-flexbox-item>
     </mu-flexbox>
@@ -13,6 +15,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { ipcRenderer } from 'electron'
 import { config } from './tools/config'
 import WaitingJoinDialog from './components/WaitingJoinDialog'
@@ -21,16 +24,14 @@ export default {
   components: {
     'waiting-join-dialog': WaitingJoinDialog
   },
-  data () {
+  created () {
     ipcRenderer.on('init', (event, arg) => {
-      this.gameId = arg.gameId
-      this.roomId = arg.roomId
-      this.userId = arg.userId
+      this.setInfo({ info: arg })
+      this.$socket.emit('init', arg)
     })
+  },
+  data () {
     return {
-      gameId: 0,
-      roomId: 0,
-      userId: 0
     }
   },
   computed: {
@@ -40,6 +41,9 @@ export default {
     rightUrl () {
       return this.gameId ? `${config.service}/${this.gameId}/index.html?roomId=${this.roomId}&gameId=${this.gameId}&userId=${this.userId}&role=${1}` : ''
     }
+  },
+  methods: {
+    ...mapActions(['setInfo'])
   }
 }
 </script>
@@ -58,6 +62,22 @@ html, body {
   width: 100%;
   height: 100%;
   border: 4px solid #d32f2f;
+}
+
+.left-cover {
+  position: absolute;
+  z-index: 999;
+  width: 50%;
+  height: 100%;
+  background-color: rgba(0,0,0,.4)
+}
+
+.right-cover {
+  position: absolute;
+  z-index: 999;
+  width: 50%;
+  height: 100%;
+  background-color: rgba(0,0,0,.4)
 }
 
 .right-frame {

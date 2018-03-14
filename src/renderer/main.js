@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import MuseUI from 'muse-ui'
 import SocketIO from 'socket.io-client'
-import VueSocketio from 'vue-socket.io'
+import VueSocketio from '../modules/vue-socket/Main'
 import 'muse-ui/dist/muse-ui.css'
 import 'muse-ui/dist/theme-carbon.css'
 
@@ -10,7 +10,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-Vue.use(VueSocketio, SocketIO('http://localhost:3000/connect'))
+Vue.use(VueSocketio, SocketIO('http://localhost:3000/connect'), store)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios

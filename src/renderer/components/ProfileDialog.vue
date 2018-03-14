@@ -1,13 +1,13 @@
 <template>
   <mu-dialog :open="open" @close="closeProfileDialog">
     <mu-list-item disabled :describeText="'ID: ' + account">
-      <mu-avatar slot="left" :src="avatarPath" class="avatar-pciker">
+      <mu-avatar slot="left" :src="tmpAvatar" class="avatar-pciker">
         <input type="file" class="file-button" accept="image/png,image/gif,image/jpeg" @change="upload">
       </mu-avatar>
-      <mu-text-field slot="title" :value="nickname"/><br/>
+      <mu-text-field slot="title" v-model="tmpNickname" /><br/>
     </mu-list-item>
     <mu-flat-button slot="actions" @click="closeProfileDialog" primary label="取消"/>
-    <mu-flat-button slot="actions" @click="closeProfileDialog" primary label="保存"/>
+    <mu-flat-button slot="actions" @click="updateProfile" primary label="保存"/>
   </mu-dialog>
 </template>
 
@@ -16,15 +16,25 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      avatarPath: ''
+      tmpNickname: this.$store.state.UserState.nickname,
+      tmpAvatar: this.$store.state.UserState.avatar
     }
   },
   computed: {
     ...mapState({
       open: state => state.ProfileDialog.open,
       account: state => state.UserState.account,
-      nickname: state => state.UserState.nickname
+      nickname: state => state.UserState.nickname,
+      avatar: state => state.UserState.avatar
     })
+  },
+  watch: {
+    nickname (val) {
+      this.tmpNickname = val
+    },
+    avatar (val) {
+      this.tmpAvatar = val
+    }
   },
   methods: {
     ...mapActions(['closeProfileDialog']),
@@ -42,10 +52,14 @@ export default {
 
       this.$http.post('http://localhost:3000/uploadAvatar', formData, config).then(res => {
         if (res.data.ret === 0) {
-          this.avatarPath = res.data.path
-        } else {
-          console.log(res)
+          this.tmpAvatar = res.data.path
         }
+      })
+    },
+    updateProfile () {
+      this.$socket.emit('update-profile', {
+        nickname: this.tmpNickname,
+        avatar: this.tmpAvatar
       })
     }
   }

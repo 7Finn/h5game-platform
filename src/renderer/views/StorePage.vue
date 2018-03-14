@@ -1,7 +1,7 @@
 <template>
   <div class="store-content">
     <div class="store-container">'
-      <mu-flexbox v-for="(row, rowIndex) in list" :gutter="15" class="mt20" :key="rowIndex">
+      <mu-flexbox v-for="(row, rowIndex) in storeGamesFormat" :gutter="15" class="mt20" :key="rowIndex">
         <mu-flexbox-item v-for="(item, itemIndex) in row" :key="itemIndex">
           <template v-if="item">
             <div class="store-item" @click="toItemPage(item)">
@@ -19,27 +19,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      list: []
     }
   },
-  mounted () {
-    this.$http.get('http://localhost:3000/storeList').then(res => {
-      if (res.data.ret === 0) {
-        for (let i = 0; i < res.data.list.length; ++i) {
-          let row = Math.floor(i / 3)
-          if (!this.list[row]) {
-            this.list.push([])
-          }
-          this.list[row].push(res.data.list[i])
-        }
-        if (this.list[this.list.length - 1].length !== 3) {
-          this.list[this.list.length - 1].length = 3
-        }
-      }
-    })
+  computed: {
+    ...mapGetters(['storeGamesFormat'])
   },
   methods: {
     toItemPage (item) {

@@ -2,7 +2,7 @@
   <div class="profile-content">
     <mu-card>
       <mu-card-header :title="userNickname" :subTitle="`ID: ${userAccount}`">
-        <mu-avatar src="/images/uicon.jpg" slot="avatar"/>
+        <mu-avatar :src="avatar" slot="avatar"/>
         <mu-icon-button icon="settings" class="edit-btn" @click="openProfileDialog" />
       </mu-card-header>
     </mu-card>
@@ -38,50 +38,20 @@
             <mu-avatar :src="searchResult.avatar" slot="leftAvatar"/>
             <mu-icon-button class="mt5" v-show="!added" icon="add" slot="right" @click="addContact"/>
           </mu-list-item>
-          <mu-sub-header>申请列表</mu-sub-header>
-          <mu-list-item title="Mike Li" disabled>
-            <mu-avatar src="" slot="leftAvatar"/>
+          <mu-sub-header v-if="applicants.length > 0">申请列表</mu-sub-header>
+          <mu-list-item v-for="(applicant, index) in applicants" :title="applicant.nickname" :describeText="'ID: ' + applicant.account" disabled :key="index">
+            <mu-avatar :src="applicant.avatar" slot="leftAvatar"/>
             <mu-icon-menu class="mt5" slot="right" icon="more_vert" :anchorOrigin="rightTop" :targetOrigin="rightTop">
-              <mu-menu-item title="同意" />
-              <mu-menu-item title="忽略" />
+              <mu-menu-item title="同意" @click="approveApplication(applicant.account)" />
+              <mu-menu-item title="忽略" @click="neglectApplication(applicant.account)" />
             </mu-icon-menu>
           </mu-list-item>
         </mu-card>
         <mu-card class="mt8">
           <mu-card-title subTitle="我的好友"/>
           <mu-list>
-            <mu-list-item title="Mike Li">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Maco Mai">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Alex Qin">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Allen Qun">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Myron Liu">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Alex Qin">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Allen Qun">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Alex Qin">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Allen Qun">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Alex Qin">
-              <mu-avatar src="" slot="leftAvatar"/>
-            </mu-list-item>
-            <mu-list-item title="Allen Qun">
-              <mu-avatar src="" slot="leftAvatar"/>
+            <mu-list-item v-for="(friend, index) in friends" :title="friend.nickname" :describeText="'ID: ' + friend.account" :key="index">
+              <mu-avatar :src="friend.avatar" slot="leftAvatar"/>
             </mu-list-item>
           </mu-list>
         </mu-card>
@@ -102,39 +72,58 @@ export default {
       rightTop: {horizontal: 'right', vertical: 'top'}
     }
   },
-  computed: {
-    ...mapState({
-      loginState: state => state.UserState.login,
-      userNickname: state => state.UserState.nickname,
-      userAccount: state => state.UserState.account
-    })
-  },
-  mounted () {
-    this.$socket.on('search', data => {
+  sockets: {
+    'search': function (data) {
       this.searching = false
       this.searchResult = data.user
-    })
-
-    this.$socket.on('add-contact', data => {
-      console.log(data)
+    },
+    'add_contact': function (data) {
       if (data.ret === 0) {
         this.added = true
       } else {
         this.added = false
       }
+    },
+    'approve_application': function (data) {
+      this.$socket.emit('get_applicants')
+      this.$socket.emit('get_friends')
+    },
+    'neglect_application': function (data) {
+      this.$socket.emit('get_applicants')
+    },
+    'has_applicant_msg': function (data) {
+      this.openSnackbar('你有一条新的好友请求')
+      this.$socket.emit('get_applicants')
+    }
+  },
+  computed: {
+    ...mapState({
+      loginState: state => state.UserState.login,
+      onlineState: state => state.UserState.online,
+      userNickname: state => state.UserState.nickname,
+      userAccount: state => state.UserState.account,
+      avatar: state => state.UserState.avatar,
+      friends: state => state.UserState.friends,
+      applicants: state => state.UserState.applicants
     })
   },
   methods: {
-    ...mapActions(['openProfileDialog']),
+    ...mapActions(['openProfileDialog', 'openSnackbar']),
     search () {
       this.$socket.emit('search', { nickname: this.searchKey })
       this.searching = true
       this.added = false
     },
     addContact () {
-      this.$socket.emit('add-contact', {
+      this.$socket.emit('add_contact', {
         nickname: this.searchResult.nickname
       })
+    },
+    approveApplication (account) {
+      this.$socket.emit('approve_application', { account: account })
+    },
+    neglectApplication (account) {
+      this.$socket.emit('neglect_application', { account: account })
     }
   }
 }
@@ -165,9 +154,6 @@ export default {
 
 .mt5 {
   margin-top: 5px;
-}
-
-.search-input {
 }
 
 .search-btn {

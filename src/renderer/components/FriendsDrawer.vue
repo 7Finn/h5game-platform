@@ -2,8 +2,8 @@
   <mu-drawer right :open="open" :docked="false" @close="closeFriendsDrawer">
     <mu-list @itemClick="invite">
       <mu-sub-header>在线好友</mu-sub-header>
-      <mu-list-item v-for="(user, index) in onlineFriends" :title="user.nickname" :key="index">
-        <mu-avatar src="" slot="leftAvatar"/>
+      <mu-list-item v-for="(user, index) in friends" :title="user.nickname" :key="index">
+        <mu-avatar :src="user.avatar" slot="leftAvatar"/>
         <mu-icon value="pan_tool" slot="right"/>
       </mu-list-item>
     </mu-list>
@@ -26,11 +26,10 @@ export default {
   computed: {
     ...mapState({
       open: state => state.FriendsDrawer.open,
-      friends: state => state.UserState.friends
-    }),
-    onlineFriends () {
-      return this.friends
-    }
+      friends: state => state.UserState.friends.filter(friend => {
+        return friend.online
+      })
+    })
   },
   methods: {
     ...mapActions(['openFriendsDrawer', 'closeFriendsDrawer']),

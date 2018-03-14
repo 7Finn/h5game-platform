@@ -1,18 +1,19 @@
 <template>
   <div class="home-content">
     <mu-paper class="content-left" :zDepth="1" :rounded="false">
-      <app-nav :list="[]" @selectChange="selectMenuChange"></app-nav>
+      <app-nav></app-nav>
     </mu-paper>
     <div class="content-right">
-      <div class="game-detail">
+      <div class="game-detail" v-if="selectedGame">
         <mu-card>
-          <mu-card-header title="Myron Avatar" subTitle="sub title">
+          <!-- <mu-card-header title="Myron Avatar" subTitle="sub title">
             <mu-avatar src="/images/uicon.jpg" slot="avatar"/>
-          </mu-card-header>
-          <mu-card-media title="Image Title" subTitle="Image Sub Title">
-            <img src="/images/sun.jpg" />
+          </mu-card-header> -->
+          <mu-card-media :title="selectedGame.name" subTitle="Image Sub Title">
+            <div class="game-banner" :style="{ backgroundImage: `url(${selectedGame.banner})` }"></div>
+            <!-- <img :src="selectedGame.banner" /> -->
           </mu-card-media>
-          <mu-card-title title="Content Title" subTitle="Content Title"/>
+          <mu-card-title title="游戏经历" subTitle="Content Title"/>
           <mu-card-text>
             散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。
             调皮的阳光掀动了四月的心帘，温暖如约的歌声渐起。
@@ -36,7 +37,7 @@
 
 <script>
 import { ipcRenderer } from 'electron'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { ROLE } from '../tools/vars'
 import axios from 'axios'
 import AppNavDrawer from '../components/AppNavDrawer'
@@ -49,14 +50,15 @@ export default {
   },
   data () {
     return {
-      select: '1'
     }
+  },
+  computed: {
+    ...mapState({
+      selectedGame: state => state.UserState.selectedGame
+    })
   },
   methods: {
     ...mapActions(['openFriendsDrawer']),
-    selectMenuChange (val) {
-      this.select = val
-    },
     invite (item) {
       const arg = {
         url: `http://localhost:9090/iframe.html`,
@@ -108,15 +110,25 @@ export default {
   position: relative;
   margin-left: 250px;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0)
+  background-color: rgba(0, 0, 0, 0);
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.game-banner {
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
 }
 
 .bottom-buttons {
   text-align: right;
   width: 100%;
   padding: 10px 20px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  right: 0;
 }
 
 .game-detail {
