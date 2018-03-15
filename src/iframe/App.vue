@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { ipcRenderer } from 'electron'
 import { config } from './tools/config'
 import WaitingJoinDialog from './components/WaitingJoinDialog'
@@ -35,11 +35,17 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      game: state => state.UserState.game,
+      competitor: state => state.UserState.competitor,
+      player: state => state.UserState.player,
+      roomId: state => state.UserState.roomId
+    }),
     leftUrl () {
-      return this.gameId ? `${config.service}/${this.gameId}/index.html?roomId=${this.roomId}&gameId=${this.gameId}&userId=${this.userId}&role=${0}` : ''
+      return this.player ? `${config.service}/${this.game.gameId}/index.html?roomId=${this.roomId}&gameId=${this.game.gameId}&account=${this.competitor.account}&role=${1}` : ''
     },
     rightUrl () {
-      return this.gameId ? `${config.service}/${this.gameId}/index.html?roomId=${this.roomId}&gameId=${this.gameId}&userId=${this.userId}&role=${1}` : ''
+      return this.player ? `${config.service}/${this.game.gameId}/index.html?roomId=${this.roomId}&gameId=${this.game.gameId}&account=${this.player.account}&role=${0}` : ''
     }
   },
   methods: {

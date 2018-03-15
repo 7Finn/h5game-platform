@@ -30,6 +30,11 @@ const mutations = {
   SOCKET_SET_FAVORITES (state, favorites) {
     state.favorites = favorites
   },
+  SOCKET_FRIEND_ONLINE (state, user) {
+    state.friends.forEach(element => {
+      if (element.account === user.account) element.online = true
+    })
+  },
   SOCKET_FRIEND_OFFLINE (state, user) {
     state.friends.forEach(element => {
       if (element.account === user.account) element.online = false

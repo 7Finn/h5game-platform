@@ -26,7 +26,7 @@
         </mu-card>
       </div>
       <div class="bottom-buttons" >
-        <mu-raised-button class="demo-raised-button" label="自己玩" icon="android" primary @click="invite"/>
+        <mu-raised-button class="demo-raised-button" label="匹配对手" icon="android" primary/>
         <mu-raised-button class="demo-raised-button" @click="openFriendsDrawer" label="邀请好友" icon="android" primary/>
         <mu-raised-button class="demo-raised-button" icon="android" backgroundColor="#a4c639" />
       </div>
@@ -36,9 +36,8 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+// import { ipcRenderer } from 'electron'
 import { mapActions, mapState } from 'vuex'
-import { ROLE } from '../tools/vars'
 import axios from 'axios'
 import AppNavDrawer from '../components/AppNavDrawer'
 import FriendsDrawer from '../components/FriendsDrawer'
@@ -59,18 +58,6 @@ export default {
   },
   methods: {
     ...mapActions(['openFriendsDrawer']),
-    invite (item) {
-      const arg = {
-        url: `http://localhost:9090/iframe.html`,
-        init: {
-          roomId: 1000,
-          gameId: 1000,
-          role: ROLE.PLAYER,
-          userId: 1
-        }
-      }
-      ipcRenderer.send('open-iframe', arg)
-    },
     upload (event) {
       let file = event.target.files[0]
       let formData = new FormData()

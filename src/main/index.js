@@ -24,7 +24,8 @@ function createWindow () {
 
   mainWindow = new BrowserWindow({
     height: 563,
-    useContentSize: true,
+    // useContentSize: true,
+    show: false,
     width: 1000
   })
 
@@ -34,6 +35,11 @@ function createWindow () {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+  })
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
+    mainWindow.focus()
   })
 }
 
@@ -45,7 +51,7 @@ function createIframeWindow (arg) {
 
   frameWindow = new BrowserWindow({
     height: 563,
-    useContentSize: true,
+    // useContentSize: true,
     show: false,
     width: 1000
   })

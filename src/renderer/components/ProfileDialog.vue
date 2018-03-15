@@ -57,7 +57,7 @@ export default {
       })
     },
     updateProfile () {
-      this.$socket.emit('update-profile', {
+      this.$socket.emit('update_profile', {
         nickname: this.tmpNickname,
         avatar: this.tmpAvatar
       })

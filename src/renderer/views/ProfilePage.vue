@@ -83,17 +83,6 @@ export default {
       } else {
         this.added = false
       }
-    },
-    'approve_application': function (data) {
-      this.$socket.emit('get_applicants')
-      this.$socket.emit('get_friends')
-    },
-    'neglect_application': function (data) {
-      this.$socket.emit('get_applicants')
-    },
-    'has_applicant_msg': function (data) {
-      this.openSnackbar('你有一条新的好友请求')
-      this.$socket.emit('get_applicants')
     }
   },
   computed: {

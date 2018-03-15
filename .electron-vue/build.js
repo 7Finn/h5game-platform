@@ -12,7 +12,7 @@ const Multispinner = require('multispinner')
 const buildConfig = require('./build.config')
 const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
-const iframeConfig = requeire('./webpack.iframe.config')
+const iframeConfig = require('./webpack.iframe.config')
 const webConfig = require('./webpack.web.config')
 
 const doneLog = chalk.bgGreen.white(' DONE ') + ' '
@@ -35,7 +35,7 @@ function build () {
 
   del.sync(['dist/electron/*', '!.gitkeep'])
 
-  const tasks = ['main', 'renderer']
+  const tasks = ['main', 'renderer', 'iframe']
   const m = new Multispinner(tasks, {
     preText: 'building',
     postText: 'process'

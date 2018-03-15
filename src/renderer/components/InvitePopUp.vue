@@ -1,17 +1,19 @@
 <template>
-  <mu-popup position="bottom" :overlay="false" popupClass="" :open="open" @close="closeInvitePopUp">
-    <mu-appbar title="邀请">
-      <mu-flat-button slot="right" label="关闭" color="white" @click="closeInvitePopUp"/>
+  <mu-popup v-if="competitor" position="bottom" :overlay="true" popupClass="" :open="open">
+    <mu-appbar title="游戏邀请">
+      <mu-flat-button slot="right" label="关闭" color="white" @click="rejectInvite"/>
     </mu-appbar>
-    <mu-content-block>
-      <p>
-        Popup 弹出框组件，可以从上下左右四个方位弹出，也可以直接渐变透明度显示，弹出框的宽度高度需要自己设置
+    <mu-content-block class="pop-up-content">
+      <p class="invite-content">
+        {{ competitor.nickname }}邀请你一起玩{{ game.name }}
       </p>
+      <mu-raised-button label="加入游戏" primary @click="join"/>
     </mu-content-block>
   </mu-popup>
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 import { mapState, mapActions } from 'vuex'
 export default {
   data () {
@@ -20,14 +22,38 @@ export default {
   },
   computed: {
     ...mapState({
-      open: state => state.InvitePopUp.open
+      open: state => state.InvitePopUp.open,
+      competitor: state => state.InvitePopUp.competitor,
+      player: state => state.InvitePopUp.player,
+      game: state => state.InvitePopUp.game,
+      roomId: state => state.InvitePopUp.roomId
     })
   },
   methods: {
-    ...mapActions(['closeInvitePopUp'])
+    ...mapActions(['rejectInvite', 'closeInvitePopUp']),
+    join () {
+      const arg = {
+        url: `http://localhost:9090/iframe.html`,
+        init: {
+          roomId: this.roomId,
+          game: this.game,
+          competitor: this.competitor,
+          player: this.player
+        }
+      }
+      ipcRenderer.send('open-iframe', arg)
+      this.closeInvitePopUp()
+    }
   }
 }
 </script>
 
 <style lang="less">
+.pop-up-content {
+  text-align: center;
+}
+
+.invite-content {
+  font-size: 18px;
+}
 </style>

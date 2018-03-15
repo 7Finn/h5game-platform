@@ -1,10 +1,10 @@
 const state = {
-  open: false
+  open: true
 }
 
 const mutations = {
-  OPEN_WAITINGJOINDIALOG (state) {
-    state.open = true
+  SOCKET_ALL_PLAYER_IN (state) {
+    state.open = false
   },
   CLOSE_WAITINGJOINDIALOG (state) {
     state.open = false

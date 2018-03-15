@@ -1,14 +1,16 @@
 const state = {
-  gameId: 0,
-  roomId: 0,
-  account: '',
+  roomId: '',
+  game: null,
+  competitor: null,
+  player: null
 }
 
 const mutations = {
   SET_INFO (state, info) {
-    state.gameId = info.gameId
     state.roomId = info.roomId
-    state.account = info.account
+    state.game = info.game
+    state.competitor = info.competitor
+    state.player = info.player
   }
 }
 
