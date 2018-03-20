@@ -30,8 +30,7 @@ export default {
   },
   methods: {
     toItemPage (item) {
-      console.log('click')
-      this.$router.push({ path: `/item/${item.id}` }) // -> /user/123
+      this.$router.push({ path: `/item/${item.gameId}` }) // -> /user/123
     }
   }
 }

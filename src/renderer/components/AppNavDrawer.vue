@@ -7,9 +7,6 @@
     <mu-list class="content-appbar" :value="select" @change="handleSelectChange">
       <mu-sub-header>收藏的游戏</mu-sub-header>
       <mu-list-item v-for="(game, index) in favorites" :title="game.name" :value="index" :class="{ active: select === '1'}" :key="index">
-        <mu-icon-menu slot="right" icon="more_vert" :anchorOrigin="anchorOrigin" :targetOrigin="targetOrigin">
-          <mu-menu-item title="删除" />
-        </mu-icon-menu>
       </mu-list-item>
     </mu-list>
   </div>

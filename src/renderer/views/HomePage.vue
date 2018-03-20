@@ -9,26 +9,44 @@
           <!-- <mu-card-header title="Myron Avatar" subTitle="sub title">
             <mu-avatar src="/images/uicon.jpg" slot="avatar"/>
           </mu-card-header> -->
-          <mu-card-media :title="selectedGame.name" subTitle="Image Sub Title">
+          <mu-card-title :title="selectedGame.name"/>
+          <mu-card-media >
             <div class="game-banner" :style="{ backgroundImage: `url(${selectedGame.banner})` }"></div>
             <!-- <img :src="selectedGame.banner" /> -->
           </mu-card-media>
-          <mu-card-title title="游戏经历" subTitle="Content Title"/>
+          <mu-card-title title="游戏经历"/>
           <mu-card-text>
-            散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。
-            调皮的阳光掀动了四月的心帘，温暖如约的歌声渐起。
-            似乎在诉说着，我也可以在漆黑的角落里，找到阴影背后的阳光，
-            找到阳光与阴影奏出和谐的旋律。我要用一颗敏感赤诚的心迎接每一缕滑过指尖的阳光！
+            <mu-table ref="table" :showCheckbox="false" v-if="experience">
+              <mu-tbody>
+                <mu-tr>
+                  <mu-td>游戏次数</mu-td>
+                  <mu-td>{{ experience.play_time }}</mu-td>
+                </mu-tr>
+                <mu-tr>
+                  <mu-td>胜场</mu-td>
+                  <mu-td>{{ experience.win_time }}</mu-td>
+                </mu-tr>
+                <mu-tr>
+                  <mu-td>胜率</mu-td>
+                  <mu-td>{{ experience.win_time / experience.play_time }}</mu-td>
+                </mu-tr>
+              </mu-tbody>
+            </mu-table>
+            <p v-if="!experience">暂未玩过该游戏</p>
           </mu-card-text>
           <mu-card-actions>
-            <mu-flat-button icon="delete" label="从收藏中删除"/>
+            <mu-flat-button icon="delete" label="从收藏中删除" @click="removeFavorite(selectedGame.gameId)"/>
           </mu-card-actions>
         </mu-card>
       </div>
-      <div class="bottom-buttons" >
-        <mu-raised-button class="demo-raised-button" label="匹配对手" icon="android" primary/>
-        <mu-raised-button class="demo-raised-button" @click="openFriendsDrawer" label="邀请好友" icon="android" primary/>
-        <mu-raised-button class="demo-raised-button" icon="android" backgroundColor="#a4c639" />
+      <div class="bottom-buttons" v-if="selectedGame">
+        <mu-raised-button class="demo-raised-button" label="匹配对手" icon="keyboard" backgroundColor="#a4c639"  primary/>
+        <mu-raised-button class="demo-raised-button" @click="openFriendsDrawer" label="邀请好友" icon="face" primary/>
+      </div>
+      <div class="empty-page" v-if="!selectedGame">
+        <h1>欢迎回来</h1>
+        <p>快选择一款游戏开始与好友对战吧！</p>
+        <img src="../assets/pk.png" alt="">
       </div>
     </div>
     <friends-drawer :list="[]"></friends-drawer>
@@ -49,15 +67,31 @@ export default {
   },
   data () {
     return {
+      experience: {}
+    }
+  },
+  sockets: {
+    'set_experience': function (data) {
+      this.experience = data
     }
   },
   computed: {
     ...mapState({
-      selectedGame: state => state.UserState.selectedGame
+      selectedGame: state => {
+        return state.UserState.selectedGame
+      }
     })
+  },
+  watch: {
+    selectedGame: function () {
+      this.$socket.emit('get_experience', { gameId: this.selectedGame.gameId })
+    }
   },
   methods: {
     ...mapActions(['openFriendsDrawer']),
+    removeFavorite (gameId) {
+      this.$socket.emit('remove_out_favorite', { gameId: gameId })
+    },
     upload (event) {
       let file = event.target.files[0]
       let formData = new FormData()
@@ -120,6 +154,18 @@ export default {
 
 .game-detail {
   padding: 20px;
+}
+
+.empty-page {
+  text-align: center;
+}
+
+.empty-page h1 {
+  font-size: 50px;
+}
+
+.empty-page p {
+  font-size: 20px;
 }
 
 </style>

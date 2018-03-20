@@ -11,19 +11,13 @@
         <mu-card>
           <mu-card-title subTitle="我的游戏"/>
         </mu-card>
-        <mu-flexbox class="mt8">
-          <mu-flexbox-item class="mygame-item">
-            <!-- <div class="store-item" @click="toItemPage(item)">
-              <div class="item-cover" :style="{ backgroundImage: `url(${item.cover})` }"></div>
-              <div class="item-info">
-                <div class="item-title">{{ item.name }}</div>
-                <div class="item-descript">{{ item.description }}</div>
-              </div>
-            </div> -->
-          </mu-flexbox-item>
-          <mu-flexbox-item class="mygame-item">
-          </mu-flexbox-item>
-          <mu-flexbox-item class="mygame-item">
+        <mu-flexbox class="mt8" v-for="(row, rowIndex) in favoriteGamesFormat" :key="rowIndex">
+          <mu-flexbox-item class="mygame-item" v-for="(item, index) in row" :key="index">
+            <template v-if="item">
+              <mu-card-media :title="item.name" :subTitle="item.description">
+                <div class="item-cover" :style="{ backgroundImage: `url(${item.cover})` }" @click="toItemPage(item)"></div>
+              </mu-card-media>
+            </template>
           </mu-flexbox-item>
         </mu-flexbox>
       </mu-flexbox-item>
@@ -61,7 +55,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -91,10 +85,12 @@ export default {
       onlineState: state => state.UserState.online,
       userNickname: state => state.UserState.nickname,
       userAccount: state => state.UserState.account,
+      favorites: state => state.UserState.favorites,
       avatar: state => state.UserState.avatar,
       friends: state => state.UserState.friends,
       applicants: state => state.UserState.applicants
-    })
+    }),
+    ...mapGetters(['favoriteGamesFormat'])
   },
   methods: {
     ...mapActions(['openProfileDialog', 'openSnackbar']),
@@ -107,6 +103,10 @@ export default {
       this.$socket.emit('add_contact', {
         nickname: this.searchResult.nickname
       })
+    },
+    toItemPage (item) {
+      console.log(item)
+      this.$router.push({ path: `/item/${item.gameId}` })
     },
     approveApplication (account) {
       this.$socket.emit('approve_application', { account: account })
@@ -153,7 +153,6 @@ export default {
 
 .mygame-item {
   cursor: pointer;
-  background-color: #eee;
   border-radius: 2px;
   display: inline-block;
   width: 100%;
@@ -177,7 +176,7 @@ export default {
   background-size: cover;
   background-position: center;
   width: 100%;
-  height: 150px;
+  height: 300px;
 }
 
 .item-title {

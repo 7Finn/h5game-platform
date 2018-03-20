@@ -79,6 +79,20 @@ const getters = {
       storeList[storeList.length - 1].length = 3
     }
     return storeList
+  },
+  favoriteGamesFormat: (state) => {
+    const favoriteList = [[]]
+    for (let i = 0; i < state.favorites.length; ++i) {
+      let row = Math.floor(i / 3)
+      if (!favoriteList[row]) {
+        favoriteList.push([])
+      }
+      favoriteList[row].push(state.favorites[i])
+    }
+    if (favoriteList[favoriteList.length - 1].length !== 3) {
+      favoriteList[favoriteList.length - 1].length = 3
+    }
+    return favoriteList
   }
 }
 

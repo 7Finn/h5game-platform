@@ -10,7 +10,9 @@
         <iframe class="right-frame" :src="rightUrl" frameborder="0"></iframe>
       </mu-flexbox-item>
     </mu-flexbox>
+    <waiting-dialog></waiting-dialog>
     <waiting-join-dialog></waiting-join-dialog>
+    <result-dialog></result-dialog>
   </div>
 </template>
 
@@ -18,11 +20,15 @@
 import { mapActions, mapState } from 'vuex'
 import { ipcRenderer } from 'electron'
 import { config } from './tools/config'
+import WaitingDialog from './components/WaitingDialog'
 import WaitingJoinDialog from './components/WaitingJoinDialog'
+import ResultDialog from './components/ResultDialog'
 
 export default {
   components: {
-    'waiting-join-dialog': WaitingJoinDialog
+    'waiting-join-dialog': WaitingJoinDialog,
+    'result-dialog': ResultDialog,
+    'waiting-dialog': WaitingDialog
   },
   created () {
     ipcRenderer.on('init', (event, arg) => {
@@ -42,10 +48,10 @@ export default {
       roomId: state => state.UserState.roomId
     }),
     leftUrl () {
-      return this.player ? `${config.service}/${this.game.gameId}/index.html?roomId=${this.roomId}&gameId=${this.game.gameId}&account=${this.competitor.account}&role=${1}` : ''
+      return this.player ? `${config.service}/${this.game.gameId}/${this.game.entry}?roomId=${this.roomId}&gameId=${this.game.gameId}&account=${this.competitor.account}&role=${1}` : ''
     },
     rightUrl () {
-      return this.player ? `${config.service}/${this.game.gameId}/index.html?roomId=${this.roomId}&gameId=${this.game.gameId}&account=${this.player.account}&role=${0}` : ''
+      return this.player ? `${config.service}/${this.game.gameId}/${this.game.entry}?roomId=${this.roomId}&gameId=${this.game.gameId}&account=${this.player.account}&role=${0}` : ''
     }
   },
   methods: {

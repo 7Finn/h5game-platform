@@ -1,5 +1,5 @@
 <template>
-  <mu-dialog :open="open" title="Waiting" dialogClass="waitingn-dialog">
+  <mu-dialog :open="open" title="Waiting" dialogClass="waiting-dialog">
     <mu-circular-progress :size="40" class="waiting-circle"></mu-circular-progress>
     {{ msg }}
   </mu-dialog>
