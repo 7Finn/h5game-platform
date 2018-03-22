@@ -2,6 +2,19 @@
 
 import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 import { autoUpdater } from 'electron-updater'
+const log = require('electron-log')
+
+// -------------------------------------------------------------------
+// Logging
+//
+// THIS SECTION IS NOT REQUIRED
+//
+// This logging setup is not required for auto-updates to work,
+// but it sure makes debugging easier :)
+// -------------------------------------------------------------------
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+log.info('App starting...')
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -40,8 +53,9 @@ function createWindow () {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
     mainWindow.focus()
-    updateHandle()
   })
+
+  updateHandle()
 }
 
 function createIframeWindow (arg) {
@@ -83,7 +97,7 @@ function updateHandle () {
     updateNotAva: '现在使用的就是最新版本，不用更新'
   }
 
-  autoUpdater.setFeedURL('https://github.com/7Finn/h5game-platform/tree/master/build/')
+  // autoUpdater.setFeedURL('https://github.com/7Finn/h5game-platform/tree/master/build/publish/')
   autoUpdater.on('error', () => {
     sendUpdateMessage(message.error)
   })
@@ -110,11 +124,11 @@ function updateHandle () {
   })
 
   // 执行自动更新检查
-  autoUpdater.checkForUpdates()
+  autoUpdater.checkForUpdatesAndNotify()
+  // autoUpdater.checkForUpdates()
 }
 
 function sendUpdateMessage (text) {
-  console.log(text)
   mainWindow.webContents.send('update-info', text)
 }
 

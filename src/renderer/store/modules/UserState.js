@@ -7,6 +7,7 @@ const state = {
   friends: [], // 好友列表
   favorites: [], // 收藏的游戏列表
   selectedGame: null, // 选择的游戏
+  selectedGameExp: null, // 选择的游戏的经历
   applicants: [], // 好友申请列表
   storeGames: [] // 商店游戏
 }
@@ -43,6 +44,9 @@ const mutations = {
   SOCKET_SET_STORE_GAMES (state, games) {
     state.storeGames = games
   },
+  SOCKET_SET_EXPERIENCE (state, experience) {
+    state.selectedGameExp = experience
+  },
   SET_USERINFO (state, user) {
     state.account = user.account
     state.nickname = user.nickname
@@ -53,6 +57,9 @@ const mutations = {
   },
   SET_APPLICANTS (state, applicants) {
     state.applicants = applicants
+  },
+  SET_SELECTED_GAME_EXP (state, exp) {
+    state.selectedGameExp = exp
   },
   SET_SELECT_GAME (state, game) {
     state.selectedGame = game
@@ -120,6 +127,9 @@ const actions = {
   },
   selectGame ({ commit }, payload) {
     commit('SET_SELECT_GAME', payload.game)
+  },
+  setSelectedGameExpEmpty ({ commit }) {
+    commit('SET_SELECTED_GAME_EXP', null)
   }
 }
 

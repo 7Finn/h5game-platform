@@ -51,7 +51,8 @@ export default {
     })
   },
   mounted () {
-    ipcRenderer.on('update-info', text => {
+    ipcRenderer.on('update-info', (event, text) => {
+      console.log(text)
       this.openSnackbar(text)
     })
     this.openLoginDialog()

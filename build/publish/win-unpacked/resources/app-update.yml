@@ -1,2 +1,3 @@
-provider: generic
-url: 'https://github.com/7Finn/h5game-platform/tree/master/build/'
+owner: 7Finn
+repo: h5game-platform
+provider: github

@@ -16,23 +16,23 @@
           </mu-card-media>
           <mu-card-title title="游戏经历"/>
           <mu-card-text>
-            <mu-table ref="table" :showCheckbox="false" v-if="experience">
+            <mu-table ref="table" :showCheckbox="false" v-if="selectedGameExp">
               <mu-tbody>
                 <mu-tr>
                   <mu-td>游戏次数</mu-td>
-                  <mu-td>{{ experience.play_time }}</mu-td>
+                  <mu-td>{{ selectedGameExp.play_time }}</mu-td>
                 </mu-tr>
                 <mu-tr>
                   <mu-td>胜场</mu-td>
-                  <mu-td>{{ experience.win_time }}</mu-td>
+                  <mu-td>{{ selectedGameExp.win_time }}</mu-td>
                 </mu-tr>
                 <mu-tr>
                   <mu-td>胜率</mu-td>
-                  <mu-td>{{ experience.win_time / experience.play_time }}</mu-td>
+                  <mu-td>{{ selectedGameExp.win_time / selectedGameExp.play_time }}</mu-td>
                 </mu-tr>
               </mu-tbody>
             </mu-table>
-            <p v-if="!experience">暂未玩过该游戏</p>
+            <p v-if="!selectedGameExp">暂未玩过该游戏</p>
           </mu-card-text>
           <mu-card-actions>
             <mu-flat-button icon="delete" label="从收藏中删除" @click="removeFavorite(selectedGame.gameId)"/>
@@ -46,7 +46,7 @@
       <div class="empty-page" v-if="!selectedGame">
         <h1>欢迎回来</h1>
         <p>快选择一款游戏开始与好友对战吧！</p>
-        <img src="../assets/pk.png" alt="">
+        <img src="../assets/pk.png" alt="" draggable="false">
       </div>
     </div>
     <friends-drawer :list="[]"></friends-drawer>
@@ -70,25 +70,20 @@ export default {
       experience: {}
     }
   },
-  sockets: {
-    'set_experience': function (data) {
-      this.experience = data
-    }
-  },
   computed: {
     ...mapState({
-      selectedGame: state => {
-        return state.UserState.selectedGame
-      }
+      selectedGame: state => state.UserState.selectedGame,
+      selectedGameExp: state => state.UserState.selectedGameExp
     })
   },
   watch: {
     selectedGame: function () {
+      this.setSelectedGameExpEmpty()
       this.$socket.emit('get_experience', { gameId: this.selectedGame.gameId })
     }
   },
   methods: {
-    ...mapActions(['openFriendsDrawer']),
+    ...mapActions(['openFriendsDrawer', 'setSelectedGameExpEmpty']),
     removeFavorite (gameId) {
       this.$socket.emit('remove_out_favorite', { gameId: gameId })
     },
@@ -158,6 +153,7 @@ export default {
 
 .empty-page {
   text-align: center;
+  user-select: none;
 }
 
 .empty-page h1 {

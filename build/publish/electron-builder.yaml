@@ -4,8 +4,9 @@ directories:
 productName: h5game
 appId: org.simulatedgreg.electron-vue
 publish:
-  - provider: generic
-    url: 'https://github.com/7Finn/h5game-platform/tree/master/build/'
+  - provider: github
+    owner: 7Finn
+    repo: h5game-platform
 files:
   - dist/electron/**/*
 dmg:
