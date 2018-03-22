@@ -51,10 +51,10 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "target": ["dmg","zip"]
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "target": ["nsis","zip"]
     },
     "linux": {
       "icon": "build/icons"

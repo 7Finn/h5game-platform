@@ -13,8 +13,7 @@ const log = require('electron-log')
 // but it sure makes debugging easier :)
 // -------------------------------------------------------------------
 autoUpdater.logger = log
-autoUpdater.logger.transports.file.level = 'info'
-log.info('App starting...')
+autoUpdater.logger.transports.file.level = 'warn'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -98,8 +97,9 @@ function updateHandle () {
   }
 
   // autoUpdater.setFeedURL('https://github.com/7Finn/h5game-platform/tree/master/build/publish/')
-  autoUpdater.on('error', () => {
-    sendUpdateMessage(message.error)
+  autoUpdater.on('error', (error) => {
+    log.info(error)
+    sendUpdateMessage(error)
   })
   autoUpdater.on('checking-for-update', () => {
     sendUpdateMessage(message.checking)
@@ -108,6 +108,7 @@ function updateHandle () {
     sendUpdateMessage(message.updateAva)
   })
   autoUpdater.on('update-not-available', (info) => {
+    log.info(info)
     sendUpdateMessage(message.updateNotAva)
   })
 
@@ -122,6 +123,8 @@ function updateHandle () {
     })
     mainWindow.webContents.send('isUpdateNow')
   })
+
+  log.info('Check Update')
 
   // 执行自动更新检查
   autoUpdater.checkForUpdatesAndNotify()

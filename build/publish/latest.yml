@@ -1,9 +1,0 @@
-version: 1.0.0
-files:
-  - url: platform-setup-1.0.0.exe
-    sha512: vufbuBlz/ieXgQ8sW3/MuxlsLbHiUXUTroX6oQX1NP0oK0FOzfDT1N0IDTWh6LonCPZkuC4PGBmVx5VeLDm7tg==
-    size: 41520862
-path: platform-setup-1.0.0.exe
-sha512: vufbuBlz/ieXgQ8sW3/MuxlsLbHiUXUTroX6oQX1NP0oK0FOzfDT1N0IDTWh6LonCPZkuC4PGBmVx5VeLDm7tg==
-sha2: 37307067fc4a434af0013e3109ce1a84799e1a96ee6ba715c93d27a1f98dda47
-releaseDate: '2018-03-22T16:09:23.415Z'
