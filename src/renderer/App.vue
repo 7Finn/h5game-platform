@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 import { mapActions, mapState } from 'vuex'
 import InvitePopUp from './components/InvitePopUp'
 import LoginDialog from './components/LoginDialog'
@@ -50,6 +51,9 @@ export default {
     })
   },
   mounted () {
+    ipcRenderer.on('update-info', text => {
+      this.openSnackbar(text)
+    })
     this.openLoginDialog()
   },
   methods: {

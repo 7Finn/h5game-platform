@@ -1,7 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow, Menu, ipcMain } from 'electron'
-
+import { autoUpdater } from 'electron-updater'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -40,6 +40,7 @@ function createWindow () {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
     mainWindow.focus()
+    updateHandle()
   })
 }
 
@@ -72,6 +73,49 @@ function createIframeWindow (arg) {
     frameWindow.show()
     frameWindow.focus()
   })
+}
+
+function updateHandle () {
+  let message = {
+    error: '检查更新出错',
+    checking: '正在检查更新……',
+    updateAva: '检测到新版本，正在下载……',
+    updateNotAva: '现在使用的就是最新版本，不用更新'
+  }
+
+  autoUpdater.setFeedURL('https://github.com/7Finn/h5game-platform/tree/master/build/')
+  autoUpdater.on('error', () => {
+    sendUpdateMessage(message.error)
+  })
+  autoUpdater.on('checking-for-update', () => {
+    sendUpdateMessage(message.checking)
+  })
+  autoUpdater.on('update-available', (info) => {
+    sendUpdateMessage(message.updateAva)
+  })
+  autoUpdater.on('update-not-available', (info) => {
+    sendUpdateMessage(message.updateNotAva)
+  })
+
+  // 更新下载进度事件
+  autoUpdater.on('download-progress', (progressObj) => {
+    mainWindow.webContents.send('downloadProgress', progressObj)
+  })
+  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) => {
+    ipcMain.on('isUpdateNow', (e, arg) => {
+      // some code here to handle event
+      autoUpdater.quitAndInstall()
+    })
+    mainWindow.webContents.send('isUpdateNow')
+  })
+
+  // 执行自动更新检查
+  autoUpdater.checkForUpdates()
+}
+
+function sendUpdateMessage (text) {
+  console.log(text)
+  mainWindow.webContents.send('update-info', text)
 }
 
 ipcMain.on('open-iframe', (event, arg) => {
