@@ -29,7 +29,7 @@
       }
     ],
     "directories": {
-      "output": "build"
+      "output": "build/publish"
     },
     "files": [
       "dist/electron/**/*"
