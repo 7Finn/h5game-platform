@@ -15,7 +15,7 @@ const mutations = {
   SET_UPDATEDIALOG (state, payload) {
     state.msg = payload.msg === undefined ? state.msg : payload.msg
     state.progressObj = payload.progressObj === undefined ? state.progressObj : payload.progressObj
-    state.finish = payload.finish === undefined ?  state.finish : payload.finish
+    state.finish = payload.finish === undefined ? state.finish : payload.finish
   }
 }
 
