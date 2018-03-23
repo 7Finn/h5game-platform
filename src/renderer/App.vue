@@ -16,6 +16,7 @@
     <login-dialog></login-dialog>
     <registe-dialog></registe-dialog>
     <profile-dialog></profile-dialog>
+    <update-dialog></update-dialog>
     <mu-snackbar v-if="snackbar" :message="snackbarMsg" action="关闭" @actionClick="closeSnackbar" @close="closeSnackbar"/>
   </div>
 </template>
@@ -27,12 +28,14 @@ import InvitePopUp from './components/InvitePopUp'
 import LoginDialog from './components/LoginDialog'
 import RegisteDialog from './components/RegisteDialog'
 import ProfileDialog from './components/ProfileDialog'
+import UpdateDialog from './components/UpdateDialog'
 export default {
   components: {
     'invite-pop-up': InvitePopUp,
     'login-dialog': LoginDialog,
     'registe-dialog': RegisteDialog,
-    'profile-dialog': ProfileDialog
+    'profile-dialog': ProfileDialog,
+    'update-dialog': UpdateDialog
   },
   data () {
     return {
@@ -52,13 +55,20 @@ export default {
   },
   mounted () {
     ipcRenderer.on('update-info', (event, text) => {
-      console.log(text)
-      this.openSnackbar(text)
+      this.closeLoginDialog()
+      this.openUpdateDialog()
+      this.setUpdateDialog({ msg: text })
+    })
+    ipcRenderer.on('download-progress', (event, progressObj) => {
+      this.setUpdateDialog({ progressObj: progressObj })
+    })
+    ipcRenderer.on('is-update-now', (event) => {
+      this.setUpdateDialog({ finish: true })
     })
     this.openLoginDialog()
   },
   methods: {
-    ...mapActions(['openInvitePopUp', 'openLoginDialog', 'openSnackbar', 'closeSnackbar']),
+    ...mapActions(['openInvitePopUp', 'openLoginDialog', 'closeLoginDialog', 'openSnackbar', 'closeSnackbar', 'openUpdateDialog', 'setUpdateDialog']),
     handleNavChange (val) {
       if (val === 'profile') {
         if (this.loginState) {

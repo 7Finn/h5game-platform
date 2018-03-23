@@ -93,13 +93,13 @@ function updateHandle () {
     error: '检查更新出错',
     checking: '正在检查更新……',
     updateAva: '检测到新版本，正在下载……',
+    downloaded: '更新已下载完毕',
     updateNotAva: '现在使用的就是最新版本，不用更新'
   }
 
   // autoUpdater.setFeedURL('https://github.com/7Finn/h5game-platform/tree/master/build/publish/')
-  autoUpdater.on('error', (error) => {
-    log.info(error)
-    sendUpdateMessage(error)
+  autoUpdater.on('error', () => {
+    sendUpdateMessage(message.error)
   })
   autoUpdater.on('checking-for-update', () => {
     sendUpdateMessage(message.checking)
@@ -108,20 +108,20 @@ function updateHandle () {
     sendUpdateMessage(message.updateAva)
   })
   autoUpdater.on('update-not-available', (info) => {
-    log.info(info)
     sendUpdateMessage(message.updateNotAva)
   })
 
   // 更新下载进度事件
   autoUpdater.on('download-progress', (progressObj) => {
-    mainWindow.webContents.send('downloadProgress', progressObj)
+    mainWindow.webContents.send('download-progress', progressObj)
   })
   autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) => {
-    ipcMain.on('isUpdateNow', (e, arg) => {
+    ipcMain.on('is-update-now', (e, arg) => {
       // some code here to handle event
       autoUpdater.quitAndInstall()
     })
-    mainWindow.webContents.send('isUpdateNow')
+    sendUpdateMessage(message.downloaded)
+    mainWindow.webContents.send('is-update-now')
   })
 
   log.info('Check Update')
