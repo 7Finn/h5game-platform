@@ -90,7 +90,7 @@ export default {
 
 <style lang="less">
 html, body {
-  font-family: '微软雅黑';
+  font-family: '微软雅黑', 'Microsoft YaHei';
   height: 100%;
   margin: 0;
   padding: 0;

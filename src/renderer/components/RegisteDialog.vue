@@ -42,8 +42,8 @@ export default {
   mounted () {
     this.$socket.on('registe', (data) => {
       if (data.ret === 0) {
-        this.closeRegisteDialog()
         this.openSnackbar('注册成功')
+        this.switchToLogin()
       }
     })
   },
@@ -75,7 +75,7 @@ export default {
           msg: '请输入6到10位字母与数字组合'
         },
         password: {
-          reg: /^[a-zA-Z0-9]{8,16}$/,
+          reg: /^[a-zA-Z0-9]{6,16}$/,
           msg: '请输入6到10位字母与数字组合'
         },
         repassword: {

@@ -1,12 +1,11 @@
 <template>
-  <mu-dialog :open="open" title="登录" @close="closeLoginDialog" dialogClass="dialog">
+  <mu-dialog :open="open" title="登录" dialogClass="dialog">
     <mu-text-field 
       label="账号" hintText="请输入账号" type="text" errorColor="orange" icon="face" labelFloat
       :fullWidth="true" :errorText="accountErrorText" v-model="account" /><br/>
     <mu-text-field label="密码" hintText="请输入密码" type="password" errorColor="orange" icon="lock" labelFloat
       :fullWidth="true" :errorText="passwordErrorText" v-model="password"/><br/>
     <p class="registeTips">没有账号？点击<a href="javascript:void(0)" @click="switchToRegiste">注册</a></p>
-    <mu-flat-button slot="actions" @click="closeLoginDialog" primary label="取消"/>
     <mu-flat-button slot="actions" @click="login" primary label="登录"/>
   </mu-dialog>
 </template>
@@ -49,7 +48,7 @@ export default {
           msg: '请输入正确的账号'
         },
         password: {
-          reg: /^[a-zA-Z0-9]{8,16}$/,
+          reg: /^[a-zA-Z0-9]{6,16}$/,
           msg: '请输入正确的密码'
         }
       }

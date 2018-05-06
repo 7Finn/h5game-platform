@@ -102,13 +102,13 @@ function updateHandle () {
     sendUpdateMessage(message.error)
   })
   autoUpdater.on('checking-for-update', () => {
-    sendUpdateMessage(message.checking)
+    // sendUpdateMessage(message.checking)
   })
   autoUpdater.on('update-available', (info) => {
     sendUpdateMessage(message.updateAva)
   })
   autoUpdater.on('update-not-available', (info) => {
-    sendUpdateMessage(message.updateNotAva)
+    // sendUpdateMessage(message.updateNotAva)
   })
 
   // 更新下载进度事件
@@ -143,7 +143,25 @@ ipcMain.on('close-iframe', (event, arg) => {
   frameWindow.close()
 })
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  // 跟踪数据模块
+  // const options = {
+  //   categoryFilter: '*',
+  //   traceOptions: 'record-until-full,enable-sampling'
+  // }
+
+  // contentTracing.startRecording(options, () => {
+  //   console.log('Tracing started')
+
+  //   setTimeout(() => {
+  //     contentTracing.stopRecording('trace', (path) => {
+  //       console.log('Tracing data recorded to ' + path)
+  //     })
+  //   }, 5000)
+  // })
+
+  createWindow()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

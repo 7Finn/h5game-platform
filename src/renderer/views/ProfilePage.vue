@@ -43,6 +43,7 @@
         </mu-card>
         <mu-card class="mt8">
           <mu-card-title subTitle="我的好友"/>
+          <mu-card-text v-if="friends.length === 0">暂无好友</mu-card-text>
           <mu-list>
             <mu-list-item v-for="(friend, index) in friends" :title="friend.nickname" :describeText="'ID: ' + friend.account" :key="index">
               <mu-avatar :src="friend.avatar" slot="leftAvatar"/>

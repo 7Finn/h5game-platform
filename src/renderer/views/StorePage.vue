@@ -43,7 +43,6 @@ export default {
   height: 100%;
   padding: 0 20px 0 20px;
   overflow-y: auto;
-  overflow-x: scroll;
 }
 
 .store-container {

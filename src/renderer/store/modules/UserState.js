@@ -2,7 +2,7 @@ const state = {
   login: false, // 是否登录
   online: false, // 是否在线
   account: '', // 用户账号（ID）
-  avatar: '', // 头像
+  avatar: 'static/avatar.jpg', // 头像
   nickname: '未登录', // 用户昵称
   friends: [], // 好友列表
   favorites: [], // 收藏的游戏列表
@@ -50,7 +50,7 @@ const mutations = {
   SET_USERINFO (state, user) {
     state.account = user.account
     state.nickname = user.nickname
-    state.avatar = user.avatar
+    if (user.avatar) state.avatar = user.avatar
   },
   SET_FRIENDS (state, friends) {
     state.friends = friends

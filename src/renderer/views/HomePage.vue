@@ -106,10 +106,11 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
 .friend-item {
   position: relative;
 }
+
 .home-content {
   height: 100%;
   background-image: url(../assets/science.png);
@@ -128,7 +129,7 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0);
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .game-banner {
