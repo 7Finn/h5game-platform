@@ -33,7 +33,6 @@ export default {
     ...mapActions(['rejectInvite', 'closeInvitePopUp']),
     join () {
       const arg = {
-        url: `http://localhost:9090/iframe.html`,
         init: {
           roomId: this.roomId,
           game: this.game,

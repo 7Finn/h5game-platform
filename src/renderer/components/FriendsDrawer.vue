@@ -47,7 +47,6 @@ export default {
       })
 
       const arg = {
-        url: `http://localhost:9090/iframe.html`,
         init: {
           roomId: roomId,
           game: this.selectedGame,

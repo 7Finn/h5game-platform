@@ -109,7 +109,7 @@ let iframeConfig = {
     __filename: process.env.NODE_ENV !== 'production'
   },
   plugins: [
-    new ExtractTextPlugin('styles.css'),
+    new ExtractTextPlugin('styles.iframe.css'),
     new HtmlWebpackPlugin({
       filename: 'iframe.html',
       template: path.resolve(__dirname, '../src/iframe/index.ejs'),

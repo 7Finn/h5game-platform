@@ -28,6 +28,10 @@ const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
+const frameUrl = process.env.NODE_ENV === 'development'
+  ? `http://localhost:9090/iframe.html`
+  : `file://${__dirname}/iframe.html`
+
 function createWindow () {
   /**
    * 初始化主线程
@@ -72,7 +76,7 @@ function createIframeWindow (arg) {
 
   frameWindow.maximize()
 
-  frameWindow.loadURL(arg.url)
+  frameWindow.loadURL(frameUrl)
 
   frameWindow.on('closed', () => {
     frameWindow = null
@@ -127,8 +131,7 @@ function updateHandle () {
   log.info('Check Update')
 
   // 执行自动更新检查
-  autoUpdater.checkForUpdatesAndNotify()
-  // autoUpdater.checkForUpdates()
+  // autoUpdater.checkForUpdatesAndNotify() // github网络有点问题先注释
 }
 
 function sendUpdateMessage (text) {
